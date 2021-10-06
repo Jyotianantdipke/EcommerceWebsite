@@ -31,6 +31,12 @@ def customer_loginview(request):
     return render(request, template_name, context)
 
 
+def customer_logout_view(request):
+    logout(request)
+    return redirect('customerlogin')
+
+
+
 def seller_registerview(request):
     form = SellerCreationForm()
     if request.method == 'POST':
@@ -57,18 +63,26 @@ def seller_loginview(request):
     return render(request, template_name, context)
 
 
-# def seller_showview(request):
-#     usr=Seller.objects.all()
-#     print(usr)
-#     tempalte_name='Accounts/SellerShow.html'
-#     context={'user':usr}
-#     return render(request,tempalte_name,context)
-
-def customer_logout_view(request):
-    logout(request)
-    return redirect('customerlogin')
-
-
 def seller_logout_view(request):
     logout(request)
     return redirect('sellerlogin')
+
+
+
+def change_pass_view(request):
+    form = PasswordChangeForm(request.user)
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user,request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Password Updated Successfully')
+            return redirect('show')
+        else:
+            messages.error(request, 'Check the fields')
+
+    template_name = 'Password_change/changepassword.html'
+    context = {'form': form}
+    return render(request, template_name, context)
+
+

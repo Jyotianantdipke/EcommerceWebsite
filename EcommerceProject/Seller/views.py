@@ -48,7 +48,7 @@ def createFakeLaptop(request):
     # if request.method=='POST':
         # no=int(request.POST.get('no'))
         # print(type(no))
-        seller = Seller.objects.filter(user=request.user)
+        seller = Seller.objects.get(user=request.user)
         MODEL=['MacBook air 17','MacBook air 2020', 'MacBook Pro', 'VivoNook15', 'Inspiration 3502', 'Notebook Pro', 'Pavilion']
         BRAND = ['HP', 'Apple', 'Dell', 'Asus', 'Lenovo' 'MI']
         RAM=[4,8,12,16, 32]
@@ -199,21 +199,23 @@ def createFakeGrocery(request):
 
 @login_required(login_url='sellerlogin')
 def delete_laptop(request,id):
+    
     record = Laptop.objects.get(id=id)
+    
     record.delete()
-    return redirect('showsellerproduct')
+    return redirect('showselleresproduct')
 
 @login_required(login_url='sellerlogin')
 def delete_mobile(request,id):
     record = Mobile.objects.get(id=id)
     record.delete()
-    return redirect('showsellerproduct')
+    return redirect('showselleresproduct')
 
 @login_required(login_url='sellerlogin')
 def delete_grocery(request,id):
     record = Grocery.objects.get(id=id)
     record.delete()
-    return redirect('showsellerproduct')
+    return redirect('showselleresproduct')
 
 
 

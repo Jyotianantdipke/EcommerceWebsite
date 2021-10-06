@@ -36,11 +36,13 @@ class City(models.Model):
         return self.city_name
 
 
-
-
 class CustomerProfile(models.Model):
     customer=models.OneToOneField(Customer,on_delete=models.CASCADE)
     Full_name = models.CharField(max_length=124)
+
+
+class CustomerAddress(models.Model):
+    customer_profile=models.ForeignKey(CustomerProfile,on_delete=models.CASCADE)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True)
     state = models.ForeignKey(State, on_delete=models.CASCADE, blank=True, null=True)
     city=models.ForeignKey(City,on_delete=models.CASCADE,blank=True, null=True)

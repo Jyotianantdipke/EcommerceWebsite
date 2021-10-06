@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from Accounts.models import Customer
-from .models import Cart
+
+from .forms import CustomerProfileForm
+from .models import Cart, State, City
 from django.contrib.auth.decorators import login_required
 from Seller.models import Laptop, Mobile, Grocery
 
@@ -13,13 +15,11 @@ def showlaptop(request):
     records = Laptop.objects.all()
     laptopfilter = LaptopFilter(request.GET, queryset=records)
     rec_per_page = Paginator(laptopfilter.qs, 3)
-    page = request.GET.get('page', 1)
-
+    page = request.GET.get('page',1)
     # print('PAGE=',page)
     # print(rec_per_page.count)
     # print(rec_per_page.num_pages)
     # print(rec_per_page.page_range)
-
     try:
         rec = rec_per_page.page(page)
     except PageNotAnInteger:
@@ -57,7 +57,6 @@ def showGrocery(request):
     groceryfilter = GroceryFilter(request.GET, queryset=records)
     rec_per_page = Paginator(groceryfilter.qs, 5)
     print('PAGINATOR=', rec_per_page)
-
     page = request.GET.get('page', 1)
     print('PAGE=', page)
     print(rec_per_page.count)
@@ -73,7 +72,7 @@ def showGrocery(request):
 
     return render(request, 'Customer/ShowGrocery.html', {'records': rec,'groceryfilter':groceryfilter})
 
-
+@login_required(login_url='customerlogin')
 def Laptopview(request, pk):
     laptop = Laptop.objects.get(id=pk)
     user = request.user
@@ -235,6 +234,7 @@ def create_profile_view(request):
 
 
 # AJAX
+
 def load_states(request):
     country_id = request.GET.get('country_id')
     states = State.objects.filter(country_id=country_id)

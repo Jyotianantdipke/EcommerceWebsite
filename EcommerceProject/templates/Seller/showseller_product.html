@@ -2,6 +2,16 @@
 {% extends 'Accounts/Base.html' %}
 {% load crispy_forms_tags %}
 
+<script type="text/javascript">
+var confirm_delete = function()
+{
+    alert(are u sure u want to delete);
+}
+document.getElementById('deletel').onclick = confirm_delete;
+console.log('click event called')
+document.getElementById('deletem').onclick = confirm_delete;
+document.getElementById('deleteg').onclick = confirm_delete;
+</script>
 {% block content %}
      {% if mobile %}
         <h3 style="text-align: center;">Mobile Added</h3>
@@ -29,7 +39,7 @@
                     <td>{{i.price}}</td>
                     <td>{{i.stock}}</td>
                     <td><a href="{% url 'updatemobile' i.id %}"><button class="btn btn-primary">Edit</button></a></td>
-                    <td><a href="{% url 'deletemobile' i.id %}"><button class="btn btn-danger">Remove</button></a></td>
+                    <td><a href="{% url 'deletemobile' i.id %}"><button class="btn btn-danger" id="deletem" onclick="confirm_delete(this.id)">Remove</button></a></td>
                 </tr>
             {% endfor %}
         </table>
@@ -51,7 +61,6 @@
             </tr>
             {% for i in laptop %}
                 <tr style="text-align: center;">
-
                     <td>{{i.name}}</td>
                     <td>{{i.brand_name}}</td>
                     <td>{{i.RAM}}</td>
@@ -62,7 +71,7 @@
                     <td>{{i.price}}</td>
                     <td>{{i.stock}}</td>
                     <td><a href="{% url 'updatelaptop' i.id %}"><button class="btn btn-primary">Edit</button></a></td>
-                    <td><a href="{% url 'deletelaptop' i.id %}"><button class="btn btn-danger">Remove</button></a></td>
+                    <td><a href="{% url 'deletelaptop' i.id %}"><button class="btn btn-danger" id="deletel" onclick="confirm_delete(this.id)">Remove</button></a></td>
                 </tr>
             {% endfor %}
         </table>
@@ -84,9 +93,10 @@
                     <td>{{i.quantity}}</td>
                     <td>{{i.price}}</td>
                     <td><a href="{% url 'updategrocery' i.id %}"><button class="btn btn-warning">Edit</button></a></td>
-                    <td><a href="{% url 'deletegrocery' i.id %}"><button class="btn btn-danger">Remove</button></a></td>
+                    <td><a href="{% url 'deletegrocery' i.id %}"><button class="btn btn-danger" id="deleteg" onclick="confirm_delete(this.id)">Remove</button></a></td>
                 </tr>
             {% endfor %}
         </table>
     {% endif %}
 {% endblock %}
+
