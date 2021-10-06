@@ -1,0 +1,92 @@
+
+{% extends 'Accounts/Base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+     {% if mobile %}
+        <h3 style="text-align: center;">Mobile Added</h3>
+        <table border="1px" class="table table-success" style="width: 80%;margin: 2% 10% 2% 10%;">
+            <tr style="text-align: center;">
+                <th>Image</th>
+                <th> Brand Name</th>
+                <th> Model Name</th>
+                <th> RAM</th>
+                <th> ROM</th>
+                <th> Processor</th>
+                <th> Warranty</th>
+                <th> Price</th>
+                <th> Stock</th>
+            </tr>
+            {% for i in mobile %}
+                <tr style="text-align: center;">
+                    <td style="width: 20%;"><img src="{{i.limage.url}}" style="width: 30%;"></td>
+                    <td>{{i.brand_name}}</td>
+                    <td>{{i.model_name}}</td>
+                    <td>{{i.RAM}}</td>
+                    <td>{{i.ROM}}</td>
+                    <td>{{i.processor}}</td>
+                    <td>{{i.warranty}}</td>
+                    <td>{{i.price}}</td>
+                    <td>{{i.stock}}</td>
+                    <td><a href="{% url 'updatemobile' i.id %}"><button class="btn btn-primary">Edit</button></a></td>
+                    <td><a href="{% url 'deletemobile' i.id %}"><button class="btn btn-danger">Remove</button></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if laptop %}
+        <h3 style="text-align: center;">laptop Added </h3>
+        <table border="1px" class="table table-success" style="width: 80%;margin: 2% 10% 2% 10%;">
+            <tr style="text-align: center;">
+                <th> Name</th>
+                <th> Brand Name</th>
+                <th> RAM</th>
+                <th> ROM</th>
+                <th> Processor</th>
+                <th> OS</th>
+                <th>Warranty</th>
+                <th>Price</th>
+                <th> Stock</th>
+            </tr>
+            {% for i in laptop %}
+                <tr style="text-align: center;">
+
+                    <td>{{i.name}}</td>
+                    <td>{{i.brand_name}}</td>
+                    <td>{{i.RAM}}</td>
+                    <td>{{i.ROM}}</td>
+                    <td>{{i.processor}}</td>
+                    <td>{{i.OS}}</td>
+                    <td>{{i.warranty}}</td>
+                    <td>{{i.price}}</td>
+                    <td>{{i.stock}}</td>
+                    <td><a href="{% url 'updatelaptop' i.id %}"><button class="btn btn-primary">Edit</button></a></td>
+                    <td><a href="{% url 'deletelaptop' i.id %}"><button class="btn btn-danger">Remove</button></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if grocery %}
+        <h3 style="text-align: center;">Grocery Added</h3>
+        <table border="1px" class="table table-success" style="width: 80%;margin: 2% 10% 2% 10%;">
+            <tr style="text-align: center;">
+                <th>Product Image</th>
+                <th>Product Name</th>
+                <th>Product Quantity</th>
+                <th>Product Price</th>
+            </tr>
+            {% for i in grocery %}
+                <tr style="text-align: center;">
+                    <td style="width: 20%;"><img src="{{i.gimage.url}}" style="width: 30%;"></td>
+                    <td>{{i.product_name}}</td>
+                    <td>{{i.quantity}}</td>
+                    <td>{{i.price}}</td>
+                    <td><a href="{% url 'updategrocery' i.id %}"><button class="btn btn-warning">Edit</button></a></td>
+                    <td><a href="{% url 'deletegrocery' i.id %}"><button class="btn btn-danger">Remove</button></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

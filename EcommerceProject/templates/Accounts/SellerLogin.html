@@ -1,0 +1,27 @@
+{% extends 'Accounts/Base.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Seller Login</title>
+    {% endblock %}
+
+{% block content %}
+    <div class="container">
+    <h3 style="text-align:center">Seller Login</h3>
+    <form method="POST" class="jumbotron" style="text-align:center">
+        {% csrf_token %}
+        <input type="number" name="mobile" placeholder="Enter Mobile No.">
+        <br><br>
+        <input type="password" name="password" placeholder="Enter Password">
+        <br><br>
+        {% if messages %}
+            {% for i in messages %}
+                {{i}}
+            {% endfor %}
+        {% endif %}
+        <button type="submit">Login</button>
+        <a class='btn btn-info' href="{% url 'sellerregister' %}">New Register</a>
+
+    </form>
+    </div>
+{% endblock content %}

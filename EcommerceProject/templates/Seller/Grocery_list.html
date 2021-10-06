@@ -1,0 +1,44 @@
+{% extends 'Accounts/Base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Grocery</title>
+{% endblock %}
+
+{% block content %}
+<h1>Grocery in stock</h1>
+<br><br>
+<div class="container">
+    <table class="table table-hover table-dark">
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Image</th>
+
+        </tr>
+        {% for i in object_list %}
+            <tr>
+                <td>{{i.product_name}}</td>
+                <td>{{i.quantity}}</td>
+                <td>{{i.price}}</td>
+                <td>{{i.image}}</td>
+
+
+                <td>
+                    <a href="{% url 'gupdate' i.id %}">
+                    <button class="btn btn-primary">Update</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'gdelete' i.id %}">
+                    <button class="btn btn-danger">Delete</button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}

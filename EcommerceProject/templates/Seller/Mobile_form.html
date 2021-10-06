@@ -1,0 +1,19 @@
+{% extends 'Accounts/Base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <title>Mobile</title>
+{% endblock %}
+
+
+<h2>Mobile Details</h2>
+{% block content %}
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form|crispy}}
+        <input type="submit" value="Add Mobile" class="btn btn-success">
+        <button><a href="{% url 'addproduct' %}">Back</a></button>
+    </form>
+</div>
+{% endblock %}

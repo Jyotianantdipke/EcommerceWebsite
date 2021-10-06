@@ -1,0 +1,22 @@
+{% extends 'Accounts/Base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    <title>Add Product</title>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="jumbotron">
+      <h2>Select Category to add product in :  </h2>
+      <button>
+        <a href="{% url 'lcreate' %}">Laptop</a>
+      </button>
+      <button>
+        <a href="{% url 'addmobile' %}">Mobile</a>
+      </button>
+      <button>
+        <a href="{% url 'gcreate' %}">Grocery</a>
+      </button>
+      </div>
+    </div>
+{% endblock content %}
