@@ -34,7 +34,7 @@ def showlaptop(request):
 def showMobile(request):
     records = Mobile.objects.all()
     mobilefilter = MobileFilter(request.GET, queryset=records)
-    rec_per_page = Paginator(mobilefilter.qs, 5)
+    rec_per_page = Paginator(mobilefilter.qs, 3)
     print('PAGINATOR=', rec_per_page)
     page = request.GET.get('page', 1)
     print('PAGE=', page)
@@ -54,7 +54,7 @@ def showMobile(request):
 def showGrocery(request):
     records = Grocery.objects.all()
     groceryfilter = GroceryFilter(request.GET, queryset=records)
-    rec_per_page = Paginator(groceryfilter.qs, 5)
+    rec_per_page = Paginator(groceryfilter.qs, 3)
     print('PAGINATOR=', rec_per_page)
     page = request.GET.get('page', 1)
     print('PAGE=', page)

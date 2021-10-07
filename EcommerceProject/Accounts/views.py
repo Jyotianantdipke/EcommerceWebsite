@@ -1,8 +1,10 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import redirect, render
 from .models import CustomUser, Customer, Seller
 from .forms import CustomerCreationForm, SellerCreationForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 
 
 def customer_registerview(request):
@@ -68,7 +70,7 @@ def seller_logout_view(request):
     return redirect('sellerlogin')
 
 
-
+@login_required(login_url='customerlogin')
 def change_pass_view(request):
     form = PasswordChangeForm(request.user)
     if request.method == 'POST':
@@ -77,11 +79,11 @@ def change_pass_view(request):
             user = form.save()
             update_session_auth_hash(request, user)
             messages.success(request, 'Password Updated Successfully')
-            return redirect('show')
+            return redirect('home')
         else:
             messages.error(request, 'Check the fields')
 
-    template_name = 'Password_change/changepassword.html'
+    template_name = 'Accounts/changepassword.html'
     context = {'form': form}
     return render(request, template_name, context)
 
