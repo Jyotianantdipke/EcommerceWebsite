@@ -225,6 +225,7 @@ def create_profile_view(request):
         if form.is_valid():
             obj = form.save(commit=False)
             obj.customer = customer
+            obj.address=form.cleaned_data['flat']+', '+form.cleaned_data['area']+', '+form.cleaned_data['landmark']
             obj.save()
             return redirect('viewprofile')
     template_name = 'Customer/Customerprofile.html'

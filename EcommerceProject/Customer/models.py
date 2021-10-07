@@ -1,4 +1,5 @@
 
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from Accounts.models import Customer,CustomUser
 from Seller.models import Laptop,Grocery,Mobile
@@ -37,12 +38,17 @@ class City(models.Model):
 
 
 class CustomerProfile(models.Model):
-    customer=models.OneToOneField(Customer,on_delete=models.CASCADE)
-    Full_name = models.CharField(max_length=124)
-
-
-class CustomerAddress(models.Model):
-    customer_profile=models.ForeignKey(CustomerProfile,on_delete=models.CASCADE)
+    customer=models.ForeignKey(Customer,on_delete=models.CASCADE)
     country = models.ForeignKey(Country, on_delete=models.CASCADE, blank=True, null=True)
+    Full_name = models.CharField(max_length=128)
+    Mobile_no=models.IntegerField(null=True,validators=[MinValueValidator(1000000000, "The Mobile number must contains 10 digits only."),MaxValueValidator(9999999999,"The Mobile number must contains 10 digits only.")])
     state = models.ForeignKey(State, on_delete=models.CASCADE, blank=True, null=True)
     city=models.ForeignKey(City,on_delete=models.CASCADE,blank=True, null=True)
+    pin_code=models.IntegerField(null=True)
+    address=models.CharField(max_length=512,null=True)
+
+
+
+
+
+
