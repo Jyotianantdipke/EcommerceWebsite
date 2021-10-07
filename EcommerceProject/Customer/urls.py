@@ -17,5 +17,6 @@ urlpatterns=[
     path('customerprofile/',views.create_profile_view,name='customerprofile'),
     path('ajax/load-states/', views.load_states, name='ajax_load_states'),
     path('ajax/load-cities/', views.load_cities, name='ajax_load_cities'),
+    path('searchresult/',views.universal_search_view,name='searchresult'),
 
 ]

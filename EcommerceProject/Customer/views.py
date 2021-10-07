@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from Accounts.models import Customer
@@ -35,9 +36,7 @@ def showMobile(request):
     mobilefilter = MobileFilter(request.GET, queryset=records)
     rec_per_page = Paginator(mobilefilter.qs, 5)
     print('PAGINATOR=', rec_per_page)
-
     page = request.GET.get('page', 1)
-
     print('PAGE=', page)
     print(rec_per_page.count)
     print(rec_per_page.num_pages)
@@ -247,3 +246,22 @@ def load_cities(request):
     cities = City.objects.filter(state_id=state_id)
     context = {'cities': cities}
     return render(request, 'Customer/citylist.html', context)
+
+
+
+
+
+def universal_search_view(request):
+    context={}
+    search_query=request.POST.get('search_query')
+    laptop_record=Laptop.objects.filter(Q(name__unaccent__lower__trigram_similar=search_query))
+                  # | Laptop.objects.filter(name__unaccent__lower__trigram_similar='Dell')|Laptop.objects.filter(name__unaccent__lower__trigram_similar='Lenovo')|Laptop.objects.filter(name__unaccent__lower__trigram_similar='Apple')
+    # grocery_record=Grocery.objects.filter(name__unaccent__lower__trigram_similar='')
+    mobile_record=Mobile.objects.filter(name__unaccent__lower__trigram_similar='redmi')
+    # Mobile.objects.filter(name__unaccent__lower__trigram_similar='vivo') | Mobile.objects.filter(name__unaccent__lower__trigram_similar='Apple') | Mobile.objects.filter(name__unaccent__lower__trigram_similar='oppo')
+    if laptop_record:
+        context['laptop_record']=laptop_record
+    if mobile_record:
+        context['mobile_record']=mobile_record
+    template_name='Customer/search_result.html'
+    return render(request,template_name, context)

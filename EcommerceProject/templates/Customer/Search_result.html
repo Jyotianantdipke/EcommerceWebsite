@@ -1,0 +1,74 @@
+{% extends 'Accounts/Base.html' %}
+{% load crispy_forms_tags %}
+{% load mobile %}
+{% block title %}
+    <title>Mobiles</title>
+{% endblock %}
+
+{% block content %}
+
+    <h1 style="text-align:center">Mobiles</h1>
+    <hr>
+
+<br>
+<br>
+<br>
+<br>
+{% if laptop_record %}
+    {% for r in records %}
+    <div class="card mb-3 container" style="max-width: 1200px;">
+      <div class="row no-gutters">
+        <div class="col-md-5">
+          <img src="{{r.image.url}}" width="{{200}}" height="{{200}}" alt="...">
+        </div>
+        <div class="col-md-7">
+          <div class="card-body">
+            <h3 class="card-title">{{r.name}}</h3>
+              <h4 class="card-title">{{r.brand_name}}</h4>
+              <h5 class="card-text">{{r.RAM}} GB RAM | {{r.ROM}} GB ROM | Expandable upto 512 GB</h5>
+              <h5 class="card-text">{{r.processor}} Processor </h5>
+              <h5 class="card-text">{{r.warranty}} Year Handset Warranty</h5>
+              <h4 class="card-text">Price: {{r.price}} Rs</h4>
+            <a href="{% url 'customermobileitem' r.pk %}" class="btn btn-success">Add to Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+{% endif %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% if mobile_record %}
+{% for r in records %}
+    <div class="card mb-3 container" style="max-width: 1200px;">
+      <div class="row no-gutters">
+        <div class="col-md-5">
+          <img src="{{r.image.url}}" width="{{350}}" height="{{200}}" alt="...">
+        </div>
+        <div class="col-md-7">
+          <div class="card-body">
+            <h4 class="card-title">{{r.brand_name}} {{r.name}}</h4>
+              <h5 class="card-text">{{r.RAM}} GB RAM | {{r.ROM}} GB ROM | Expandable upto 2 TB</h5>
+              <h5 class="card-text">11th Generation {{r.processor}} Processor</h5>
+              <h5 class="card-text">{{r.warranty}} Year Warranty</h5>
+              <h4 class="card-text">Price: {{r.price}} Rs</h4>
+            <a href="{% url 'customerlaptopitem' r.pk %}" class="btn btn-success">Add to Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+{% endif %}
+
+
+
+
+
+
+
+{% endblock %}
