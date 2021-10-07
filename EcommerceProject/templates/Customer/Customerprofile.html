@@ -1,22 +1,15 @@
-
-
-{% extends 'Accounts/Base.html' %}
-{% load crispy_forms_tags %}
-{% block title %}
-    <title>Cart</title>
-{% endblock %}
-
-{% block content %}
-<div class="container">
-    <div class="jumbotron">
-        <form method="post" id="profileForm" state_url="{% url 'ajax_load_states' %}" city_url="{% url 'ajax_load_cities' %}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" id="profileForm" state_url="{% url 'ajax_load_states' %}" city_url="{% url 'ajax_load_cities' %}">
     {% csrf_token %}
-    {{form|crispy}}
+    {{form.as_p}}
     <input type="submit" value="Submit" class="btn btn-success">
 </form>
-    </div>
-</div>
-
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
     $("#id_country").change(function () {
@@ -49,4 +42,5 @@
 
     });
 </script>
-{% endblock %}
+</body>
+</html>

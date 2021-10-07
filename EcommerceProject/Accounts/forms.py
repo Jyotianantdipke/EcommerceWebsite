@@ -10,6 +10,17 @@ class CustomerCreationForm(UserCreationForm):
         model = CustomUser
         fields = ('mobile_no','email')
 
+        labels={
+            'mobile_no':'Mobile Number',
+        }
+
+        widgets = {
+            'Mobile_no': forms.TextInput(attrs={'placeholder': '10-digit mobile number without prefixex', }),
+
+
+        }
+
+
     def save(self):
         user = super().save(commit=False)
         user.is_customer = True
@@ -21,13 +32,15 @@ class CustomerCreationForm(UserCreationForm):
 class SellerCreationForm(UserCreationForm):
     name = forms.CharField(max_length=64)
     company_name=forms.CharField(max_length=50)
-    gst_no=forms.CharField(max_length=200)
+    gst_no=forms.CharField(max_length=200,)
     address=forms.CharField(max_length=1000)
     bank_account=forms.IntegerField()
 
     class Meta:
         model = CustomUser
         fields = ('mobile_no','email')
+
+
 
     def save(self):
         user = super().save(commit=False)

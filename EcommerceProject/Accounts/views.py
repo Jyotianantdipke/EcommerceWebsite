@@ -20,6 +20,7 @@ def customer_registerview(request):
 
 
 def customer_loginview(request):
+    logout(request)
     if request.method == 'POST':
         no = request.POST.get('mobile')
         p = request.POST.get('password')
@@ -52,6 +53,7 @@ def seller_registerview(request):
 
 
 def seller_loginview(request):
+    logout(request)
     if request.method == 'POST':
         no = request.POST.get('mobile')
         p = request.POST.get('password')
