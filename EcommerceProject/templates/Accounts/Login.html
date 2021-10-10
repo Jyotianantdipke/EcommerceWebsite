@@ -45,12 +45,18 @@
 				</div>
 				<br>
 				<br>
+				{% if messages %}
+                	{% for i in messages %}
+				<p style="color:red;">{{i}}</p>
+                	{% endfor %}
+            	{% endif %}
+				<br>
 				<div class="group">
 					<input type="submit" class="button" value="Sign In">
 				</div>
 				<div class="hr"></div>
 				<div class="foot-lnk">
-					<a href="{% url 'reset_password' %}">Forgot Password?</a>
+					<a href="">Forgot Password?</a>
 				</div>
 				<br>
 				<div class="foot-lnk">

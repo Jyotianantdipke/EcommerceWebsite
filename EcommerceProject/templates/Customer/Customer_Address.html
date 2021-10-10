@@ -1,0 +1,16 @@
+{% extends 'Customer/Profile_Base.html' %}
+
+{% block InnerContent %}
+
+
+  <form method="post" id="personForm" data-state-url="{% url 'ajax_load_states' %}" data-cities-url="{% url 'ajax_load_cities' %}" >
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <button type="submit">Save</button>
+  </form>
+
+  
+
+{% endblock InnerContent %}

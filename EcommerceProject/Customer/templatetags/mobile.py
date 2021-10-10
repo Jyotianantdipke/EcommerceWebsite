@@ -1,5 +1,3 @@
-
-
 from django import template
 
 register = template.Library()
@@ -13,4 +11,3 @@ def relative_url(value, field_name, urlencode=None):
         encoded_querystring = '&'.join(filtered_querystring)
         url = '{}&{}'.format(url, encoded_querystring)
     return url
-

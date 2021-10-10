@@ -1,0 +1,22 @@
+{% extends 'Customer/Profile_Base.html' %}
+{% load crispy_forms_tags %}
+{% block InnerContent %}
+    <div class="container">
+        <div class="jumbotron">
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                <h3>{{ field.label }}: </h3>
+                {% for choice in field %}
+                    {{ choice }}
+                {% endfor %}
+                <br>
+            {% endfor %}
+            
+            <br>
+                <input type="submit" value="Save" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+  
+{% endblock InnerContent %}

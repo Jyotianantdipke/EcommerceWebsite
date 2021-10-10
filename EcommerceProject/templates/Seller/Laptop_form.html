@@ -1,4 +1,4 @@
-{% extends 'Accounts/Base.html' %}
+{% extends 'Seller/Seller_Base.html' %}
 {% load crispy_forms_tags %}
 
 {% block title %}
@@ -6,12 +6,20 @@
 {% endblock %}
 
 {% block content %}
+<br>
+<h2 style="text-align:center">Add Laptop Details</h2>
+<hr>
+                <div class="container" style="text-align:right">
+    <a class="btn btn-info" href="{% url 'cfl' %}" style="text-align:center">Create Fake Laptop</a>
+    </div>
+<br>
 <div class="container">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" class="jumbotron">
         {% csrf_token %}
         {{form|crispy}}
         <input type="submit" value="Add Laptop" class="btn btn-success">
-        <button><a href="{% url 'addproduct' %}">Back</a></button>
+        <button class="btn btn-info"><a href="{% url 'addproduct' %}" style="color:white;">Back</a></button>
     </form>
+
 </div>
 {% endblock %}

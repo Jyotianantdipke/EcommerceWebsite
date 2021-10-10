@@ -1,6 +1,6 @@
 import django_filters
-from .models import Laptop, Mobile, Grocery
-
+from Seller.models import Laptop, Mobile, Grocery
+from django import forms
 
 class LaptopFilter(django_filters.FilterSet):
     # price = django_filters.NumberFilter()
@@ -24,6 +24,17 @@ class MobileFilter(django_filters.FilterSet):
         model = Mobile
         fields = '__all__'
         exclude = ['image', 'seller', 'stock','warranty','price']
+
+        labels = {'name': 'Model Name',
+                  'RAM': 'RAM in GB',
+                  'ROM': 'RAM in GB',
+                  'warranty': 'Warranty in months',
+                  'price': 'Price in Rs.',
+                  }
+        widgets = {'RAM': forms.TextInput(attrs={'placeholder': 'Ex. 2, 4, 8, 16, 32, 64....', }),
+                   'ROM': forms.TextInput(attrs={'placeholder': 'Ex. 16, 32, 64, 128, 256, 512, 1025... '}),
+                   'processor': forms.TextInput(attrs={'placeholder': 'Ex. Octacore, DualCore '}),
+                   'OS': forms.TextInput(attrs={'placeholder': 'Ex. Windows, Linux, MackOS '})}
 
 
 class GroceryFilter(django_filters.FilterSet):
