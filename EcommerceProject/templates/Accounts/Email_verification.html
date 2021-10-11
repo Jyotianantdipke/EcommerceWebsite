@@ -1,0 +1,31 @@
+{% extends 'Customer/Customer_Base.html' %}
+{% load crispy_forms_tags %}
+
+<!--{% load static %}-->
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type='text/javascript'></script>
+<div id="email_div" style="display: block;" >
+
+    <label for="email">Email</label>
+    <input type="text" name="email" id="email">
+    <button id='customer_email' customer_email="{% url 'send_otp' %}" onclick="ajax_send_otp()">Send OTP</button>
+</div>
+<div id="verify_text_div"></div>
+<div id="otp_div" style="display: none;" >
+
+    <label for="email">OTP</label>
+    <input type="text" name="otp" id="otp">
+    <button  onclick="verify_otp()" id='active' active="{% url 'useractivation' %}"> Verify</button>
+</div>
+<br>
+
+
+
+
+
+
+
+
+
+{% endblock %}

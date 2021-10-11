@@ -25,6 +25,7 @@ class CustomerProfileForm(forms.ModelForm):
        
     
 class AddressesForm(forms.ModelForm):
+    
     class Meta:
         model=Addresses
         field='__all__'

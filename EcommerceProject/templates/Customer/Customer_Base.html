@@ -513,6 +513,61 @@
     
   </script>
 
+<!-- Ajax for Email Verification -->
+
+<script>
+    var otp_from_back="";
+    var email1="";
+    function ajax_send_otp(){
+       document.getElementById("email_div").style.display='none';
+       email = document.getElementById("email");
+       console.log(email);
+       
+       const url1=$('#customer_email').attr('customer_email')
+     $.post(url1,
+         {
+             "email":email.value,
+             "csrfmiddlewaretoken":"{{csrf_token}}"
+         },
+         function(data, status){
+             if(status=="success"){
+                 email1=email.value;
+                 console.log(email1)
+                 otp_from_back = data;
+                 document.getElementById("otp_div").style.display='block';
+                 }
+    }
+    );
+    }
+   function verify_otp(){
+       var user_otp=document.getElementById("otp").value;
+       const url2=$('#active').attr('active');
+       console.log(url2)
+       if (user_otp==otp_from_back){
+
+           document.getElementById("verify_text_div").style.color="green";            
+           document.getElementById("verify_text_div").innerHTML="OTP Verified\n Click on login to continue shopping\n";
+           document.getElementById("otp_div").style.display="none";
+           
+           $.post(url2,
+                    {
+                        "email":email1,
+                        "csrfmiddlewaretoken":"{{csrf_token}}"
+                    }
+                   );
+
+               console.log(url2)
+       }
+       else{
+           document.getElementById("verify_text_div").style.color="red";
+           document.getElementById("verify_text_div").innerHTML="Try Again!!";
+       }
+   } 
+</script>
+
+
+
+
 </body>
 
 </html>

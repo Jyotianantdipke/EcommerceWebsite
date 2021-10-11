@@ -13,8 +13,8 @@ class Cart(models.Model):
     price=models.IntegerField()
     quantity=models.IntegerField()
 
-    # def __str__(self):
-    #     return f'{self.customer.name}'
+    def __str__(self):
+        return f'{self.customer.name}'
 
 
 class Country(models.Model):
@@ -67,4 +67,5 @@ class Addresses(models.Model):
     flat = models.CharField(max_length=64,null=True)
     area = models.CharField(max_length=64,null=True)
     landmark = models.CharField(max_length=64,null=True)
+    
     
