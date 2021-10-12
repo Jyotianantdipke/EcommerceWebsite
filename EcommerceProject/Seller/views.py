@@ -50,13 +50,12 @@ def add_laptop(request):
     return render(request, template_name, context)
 
 
-def create_fake_laptop(request):
-
-        all_user = Seller.objects.all()
-        SELLER = []
-        for i in all_user:
-            print(' All Seller User:', i.user_id, type(i.user_id))
-            SELLER.append(i)
+@login_required(login_url='sellerlogin')
+def createFakeLaptop(request):
+    # if request.method=='POST':
+        # no=int(request.POST.get('no'))
+        # print(type(no))
+        seller = Seller.objects.get(user=request.user)
         MODEL=['MacBook air 17','MacBook air 2020', 'MacBook Pro', 'VivoNook15', 'Inspiration 3502', 'Notebook Pro', 'Pavilion']
         BRAND = ['HP', 'Apple', 'Dell', 'Asus', 'Lenovo' 'MI']
         RAM=[4,8,12,16, 32]
@@ -76,12 +75,10 @@ def create_fake_laptop(request):
             os=fake.random_element(OS)
             w = fake.random_element(WARRANTY)
             p=fake.random_element(Price)
-            se=fake.random_element(SELLER)
             so=fake.random_number(digits=2)
-            Laptop.objects.create(seller=se, name=m,brand_name=b, RAM=ra, ROM=ro, processor=pr, OS=os, warranty=w, price=p, stock=so)
+            Laptop.objects.create(seller=seller, name=m,brand_name=b, RAM=ra, ROM=ro, processor=pr, OS=os, warranty=w, price=p, stock=so)
         return redirect('showallproducts')
 
-        return HttpResponse('DAta created')
 
 @login_required(login_url='sellerlogin')
 def update_laptop(request, id):
@@ -120,13 +117,16 @@ def add_mobile(request):
     return render(request, template_name, context)
 
 
-def create_fake_mobile(request):
-
-        all_user = Seller.objects.all()
-        SELLER = []
-        for i in all_user:
-            print(' All Seller User:', i.user_id, type(i.user_id))
-            SELLER.append(i)
+@login_required(login_url='sellerlogin')
+def createFakeMobile(request):
+    # if request.method=='POST':
+        # no=int(request.POST.get('no'))
+        # print(type(no))
+        seller = Seller.objects.get(user=request.user)
+        # SELLER = []
+        # for i in all_user:
+        #     print(' All Seller User:', i.user_id, type(i.user_id))
+        #     SELLER.append(i)
         MODEL=['Galaxy 12','9A', 'Galaxy M13', 'Note 10S', 'Note M12', 'S 12 Pro']
         BRAND = ['Vivo', 'iphone', 'MI', 'Samsung', 'Realme' 'OPPO']
         RAM=[4,8,12,16]
@@ -145,12 +145,9 @@ def create_fake_mobile(request):
             pr = fake.random_element(PROCESSOR)
             w = fake.random_element(WARRANTY)
             p=fake.random_element(Price)
-            s = fake.random_element(SELLER)
             so = fake.random_number(digits=2)
-            Mobile.objects.create(seller=s,name=m,brand_name=b, RAM=ra, ROM=ro, processor=pr, warranty=w, price=p, stock=so)
+            Mobile.objects.create(seller=seller,name=m,brand_name=b, RAM=ra, ROM=ro, processor=pr, warranty=w, price=p, stock=so)
         return redirect('showallproducts')
-
-        return HttpResponse('DAta created')
 
 
 @login_required(login_url='sellerlogin')
@@ -192,31 +189,31 @@ def add_grocery(request):
     context={'form':form}
     return render(request, template_name, context)
 
-def create_fake_grocery(request):
 
+@login_required(login_url='sellerlogin')
+def createFakeGrocery(request):
+    # if request.method=='POST':
+        # no=int(request.POST.get('no'))
+        # print(type(no))
         user=request.user
         print(' Seller User for fake data:', user.id)
-        all_user=Seller.objects.all()
-        SELLER = []
-        for i in all_user:
-            print(' All Seller User:', i.user_id, type(i.user_id))
-            SELLER.append(i)
 
+
+        seller = Seller.objects.get(user=request.user)
+       
         NAME=['Sugar','Tea Powder', 'Coffee Powder', 'Chana / Chole', 'Red Rajma','Rosted Suji (Rava)']
         Price=[23, 45, 56]
         WARRANTY = [1, 2, 3, 5, 10]
-        print(SELLER)
         fake=Faker()
         for i in range(10):
             n=fake.random_element(NAME)
             q = fake.random_number(digits=2)
             p=fake.random_element(Price)
             w = fake.random_element(WARRANTY)
-            s = fake.random_element(SELLER)
-            Grocery.objects.create(seller=s, product_name=n,quantity=q, price=p, warranty=w)
+            # s = fake.random_element(SELLER)
+            Grocery.objects.create(seller=seller, product_name=n,quantity=q, price=p, warranty=w)
         return redirect('showallproducts')
 
-        return HttpResponse('DAta created')
 
 @login_required(login_url='sellerlogin')
 def update_grocery(request, id):

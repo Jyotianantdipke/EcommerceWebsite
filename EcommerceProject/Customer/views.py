@@ -1,3 +1,5 @@
+from django.contrib.postgres import search
+from django.db import models
 from django.shortcuts import render,redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from Accounts.models import Customer
@@ -9,7 +11,9 @@ from .filters import LaptopFilter, MobileFilter, GroceryFilter
 from.forms import CustomerProfileForm,AddressesForm
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
+from django.apps import apps
 from django.urls import reverse_lazy
+from django.contrib.postgres.search import SearchQuery,SearchRank,SearchVector
 
 # Create your views here.
 def seller_to_customer_home(request):
@@ -92,67 +96,76 @@ def Laptopview(request, pk):
     laptop = Laptop.objects.get(id=pk)
     user = request.user
     print('User :',user.id)
-    cst = Customer.objects.get(user=user)
-    y = Cart.objects.filter(customer=cst, laptop=laptop).first()
-    if y:
-        z = y.quantity + 1
-        p = y.price / y.quantity
-        q = p * z
-        y.price = q
-        y.quantity = z
-        y.save()
-        print('Updated!!!')
+    try:
+        cst = Customer.objects.get(user=user)
+        y = Cart.objects.filter(customer=cst, laptop=laptop).first()
+        if y:
+            z = y.quantity + 1
+            p = y.price / y.quantity
+            q = p * z
+            y.price = q
+            y.quantity = z
+            y.save()
+            print('Updated!!!')
+            return redirect('cartview')
+        else:
+            Cart.objects.create(customer=cst, laptop=laptop, mobile=None, grocery=None, price=laptop.price, quantity=1)
+            print('Created!!!')
         return redirect('cartview')
-    else:
-        Cart.objects.create(customer=cst, laptop=laptop, mobile=None, grocery=None, price=laptop.price, quantity=1)
-        print('Created!!!')
-    return redirect('cartview')
+    except Customer.DoesNotExist:
+        return redirect('customerlogin')
+        
 
 @login_required(login_url='customerlogin')
 def Mobileview(request, pk):
     mobile = Mobile.objects.get(id=pk)
     user = request.user
-    cst = Customer.objects.get(user=user)
-    y = Cart.objects.filter(customer=cst, mobile=mobile).first()
-    if y:
-        z = y.quantity + 1
-        p = y.price / y.quantity
-        q = p * z
-        y.price = q
-        y.quantity = z
-        y.save()
-        print('Updated!!!')
+    try:
+        cst = Customer.objects.get(user=user)
+        y = Cart.objects.filter(customer=cst, mobile=mobile).first()
+        if y:
+            z = y.quantity + 1
+            p = y.price / y.quantity
+            q = p * z
+            y.price = q
+            y.quantity = z
+            y.save()
+            print('Updated!!!')
+            return redirect('cartview')
+        else:
+            Cart.objects.create(customer=cst, laptop=None, mobile=mobile, grocery=None, price=mobile.price, quantity=1)
+            print('Created!!!')
         return redirect('cartview')
-    else:
-        Cart.objects.create(customer=cst, laptop=None, mobile=mobile, grocery=None, price=mobile.price, quantity=1)
-        print('Created!!!')
-    return redirect('cartview')
+    except Customer.DoesNotExist:
+        return redirect('customerlogin')
 
 @login_required(login_url='customerlogin')
 def Groceryview(request, pk):
     grocery = Grocery.objects.get(id=pk)
     user = request.user
-    cst = Customer.objects.get(user=user)
-    y = Cart.objects.filter(customer=cst, grocery=grocery).first()
-    if y:
-        z = y.quantity + 1
-        p = y.price / y.quantity
-        q = p * z
-        y.price = q
-        y.quantity = z
-        y.save()
-        print('Updated!!!')
+    try:
+        cst = Customer.objects.get(user=user)
+        y = Cart.objects.filter(customer=cst, grocery=grocery).first()
+        if y:
+            z = y.quantity + 1
+            p = y.price / y.quantity
+            q = p * z
+            y.price = q
+            y.quantity = z
+            y.save()
+            print('Updated!!!')
+            return redirect('cartview')
+        else:
+            Cart.objects.create(customer=cst, laptop=None, mobile=None, grocery=grocery, price=grocery.price, quantity=1)
+            print('Created!!!')
         return redirect('cartview')
-    else:
-        Cart.objects.create(customer=cst, laptop=None, mobile=None, grocery=grocery, price=grocery.price, quantity=1)
-        print('Created!!!')
-    return redirect('cartview')
+    except Customer.DoesNotExist:
+        return redirect('customerlogin')
 
 
 @login_required(login_url='customerlogin')
 def Cartview(request):
     user = request.user
-    
     # print('User:', user)
     cst = Customer.objects.get(user=user)
     print(cst)
@@ -337,4 +350,60 @@ def load_cities(request):
 
 @login_required(login_url='customerlogin')
 def profile_page(request):
-    return render(request,'Customer/Profile_base.html')
+    return render(request,'Customer/Show_Customer_Profile.html')
+
+
+def universal_search(request):
+    query=request.GET.get('searchquery')
+    print(query,type(query))
+    all_models=[model.__name__ for model in apps.get_models()]
+    print("\n\n  All model name:  ",[i for i in all_models])
+    context={}
+    for i in all_models:
+        result=''
+        query_str=query.split(' ')
+        for elem in query_str:
+        # capitalize first letter of each word and add to a string
+            if len(result) > 0:
+                result = result + " " + elem.strip().capitalize()
+            else:
+                result = elem.capitalize()
+        if i.find(result) != -1 :   
+            print("inside if loop model name:")
+            Model = apps.get_model('Seller', query)
+            print(Model)
+            record=Model.objects.all()   
+            for i in record:
+                print(i) 
+            context['Model']=Model.__name__
+            print("Model Name is:   ",context['Model'])
+            context['record']=record
+    if query:
+            vector1=SearchVector('name','RAM','ROM','brand_name','processor','OS')
+            print(vector1)
+            vector2=SearchVector('name','RAM','ROM','brand_name','processor')
+            print(vector2)
+            vector3=SearchVector('product_name')
+            print(vector3)
+
+            query=SearchQuery(query)
+            print(query)
+            laptop=Laptop.objects.annotate(search=vector1).filter(search=query)
+            mobile=Mobile.objects.annotate(search=vector2).filter(search=query)
+            grocery=Grocery.objects.annotate(search=vector3).filter(search=query)
+            print("laptop","\n",len(laptop),laptop)
+            print("mobile","\n",len(mobile),mobile)
+            print("grocery","\n",len(grocery),grocery)
+            context['laptop']=laptop
+            context['grocery']=grocery
+            context['mobile']=mobile
+    else:
+            laptop=None
+            mobile=None
+            grocery=None
+
+    
+    print("context is :      \n\n",context)
+    # context={'laptop':laptop,'mobile':mobile,'grocery':grocery,'record':record,'Model':Model}
+    return render(request,'Customer/universal_search.html',context)
+

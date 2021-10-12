@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.postgres',
+    'django.contrib.postgres',
     'Accounts',
     'Seller',
     'Customer',
@@ -84,8 +84,8 @@ WSGI_APPLICATION = 'EcommerceProject.wsgi.application'
 DATABASES = {
     'default': {
         # Settings for sqlite
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
 
         # Custom settings for MySQL db
         # 'ENGINE': 'django.db.backends.mysql',
@@ -96,17 +96,19 @@ DATABASES = {
 
         # Setting for postgresql
 
-    #     'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql',
 
-    #    'NAME': 'EcommerceProject',
+       'NAME': 'oyfgxhhf',
 
-    #    'USER': 'postgres',
+       'USER': 'oyfgxhhf',
 
-    #    'PASSWORD': 'root',
+       'PASSWORD': 'tRbKGQHSGc6SI3R5uD4RBpBQHczzXdE2',
 
-    #    'HOST': '127.0.0.1',
+       'HOST': 'fanny.db.elephantsql.com',
 
-    #    'PORT': 5432,
+       'PORT': 5432,
+
+    #    postgres://oyfgxhhf:tRbKGQHSGc6SI3R5uD4RBpBQHczzXdE2@/oyfgxhhf
     }
 }
 
@@ -168,4 +170,4 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS= True
 EMAIL_PORT = 587
 EMAIL_HOST_USER= 'kusumdipke@gmail.com'
-EMAIL_HOST_PASSWORD='Kusum@123'
+EMAIL_HOST_PASSWORD='9175642103'
