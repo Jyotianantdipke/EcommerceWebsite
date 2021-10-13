@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.postgres',
+    # 'django.contrib.postgres',
     'Accounts',
     'Seller',
     'Customer',
@@ -84,8 +84,8 @@ WSGI_APPLICATION = 'EcommerceProject.wsgi.application'
 DATABASES = {
     'default': {
         # Settings for sqlite
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
 
         # Custom settings for MySQL db
         # 'ENGINE': 'django.db.backends.mysql',
@@ -96,18 +96,12 @@ DATABASES = {
 
         # Setting for postgresql
 
-        'ENGINE': 'django.db.backends.postgresql',
-
-       'NAME': 'oyfgxhhf',
-
-       'USER': 'oyfgxhhf',
-
-       'PASSWORD': 'tRbKGQHSGc6SI3R5uD4RBpBQHczzXdE2',
-
-       'HOST': 'fanny.db.elephantsql.com',
-
-       'PORT': 5432,
-
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #    'NAME': 'oyfgxhhf',
+    #    'USER': 'oyfgxhhf',
+    #    'PASSWORD': 'tRbKGQHSGc6SI3R5uD4RBpBQHczzXdE2',
+    #    'HOST': 'fanny.db.elephantsql.com',
+    #    'PORT': 5432,
     #    postgres://oyfgxhhf:tRbKGQHSGc6SI3R5uD4RBpBQHczzXdE2@/oyfgxhhf
     }
 }

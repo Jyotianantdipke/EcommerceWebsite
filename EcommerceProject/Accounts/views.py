@@ -33,9 +33,10 @@ def email_verification(request):
 def customuser_activation(request):
     try:
         email=request.POST.get('email')
-        print(email)
+        print("Entered Email:    ",email)
         user=CustomUser.objects.get(email=email)
         user.is_active=True
+        print("Database User   ",user.email)
         user.save()
         if user.is_customer==True:
             return redirect('customerlogin')
@@ -53,8 +54,12 @@ def customer_loginview(request):
         if request.method == 'POST':
             no = request.POST.get('mobile')
             p = request.POST.get('password')
-            customer=CustomUser.objects.get(mobile_no=no)
-            if customer.is_active:
+            try:
+                customer=CustomUser.objects.get(mobile_no=no)
+            except CustomUser.DoesNotExist:
+                messages.error(request,"Please check mobile no, this No is not registered ")
+                return redirect('customerlogin')
+            if customer.is_active==True:
                 user=authenticate(username=no,password=p)
                 if user and user.is_customer:
                     login(request, user)
@@ -90,7 +95,11 @@ def seller_loginview(request):
         if request.method == 'POST':
             no=request.POST.get('mobile')
             p=request.POST.get('password')
-            seller=CustomUser.objects.get(mobile_no=no)
+            try:
+                seller=CustomUser.objects.get(mobile_no=no)
+            except CustomUser.DoesNotExist:
+                messages.error(request,"Please check mobile no, this No is not registered ")
+                return redirect('customerlogin')
             if seller.is_active:
                 user=authenticate(username=no,password=p)
                 if user and user.is_seller:
@@ -169,6 +178,13 @@ def generateOTP():
 
 def send_otp(request):
     email = request.POST.get("email")
+    print(email)
+    try:
+        print("From Try ",email)
+        CustomUser.objects.get(email=email)
+    except CustomUser.DoesNotExist:
+        messages.error(request,"This Email Id is not registered ")
+        return redirect('emailverify')
     print(email)
     o = generateOTP()
     print(o)

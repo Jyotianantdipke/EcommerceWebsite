@@ -13,6 +13,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 from django.apps import apps
 from django.urls import reverse_lazy
+from django.db.models import Q
 from django.contrib.postgres.search import SearchQuery,SearchRank,SearchVector
 
 # Create your views here.
@@ -353,57 +354,122 @@ def profile_page(request):
     return render(request,'Customer/Show_Customer_Profile.html')
 
 
+# def universal_search(request):
+#     query=request.GET.get('searchquery')
+#     print(query,type(query))
+#     all_models=[model.__name__ for model in apps.get_models()]
+#     print("\n\n  All model name:  ",[i for i in all_models])
+#     context={}
+#     for i in all_models:
+#         result=''
+#         query_str=query.split(' ')
+#         print(query_str)
+#         for elem in query_str:
+#         # capitalize first letter of each word and add to a string
+#             if len(result) > 0:
+#                 result = result + " " + elem.strip().capitalize()
+#                 print("result",result)
+#             else:
+#                 result = elem.capitalize()
+#         if i.find(result) != -1 :   
+#             print("inside if loop model name:")
+#             Model = apps.get_model('Seller', query)
+#             print(Model)
+#             record=Model.objects.all()   
+#             for i in record:
+#                 print(i) 
+#             context['Model']=Model.__name__
+#             print("Model Name is:   ",context['Model'])
+#             context['record']=record
+#     if query:
+#             vector1=SearchVector('name','RAM','ROM','brand_name','processor','OS')
+#             print(vector1)
+#             vector2=SearchVector('name','RAM','ROM','brand_name','processor')
+#             print(vector2)
+#             vector3=SearchVector('product_name')
+#             print(vector3)
+#             query=SearchQuery(query)
+#             print(query)
+#             laptop=Laptop.objects.annotate(search=vector1).filter(search=query)
+#             mobile=Mobile.objects.annotate(search=vector2).filter(search=query)
+#             grocery=Grocery.objects.annotate(search=vector3).filter(search=query)
+#             print("laptop","\n",len(laptop),laptop)
+#             print("mobile","\n",len(mobile),mobile)
+#             print("grocery","\n",len(grocery),grocery)
+#             context['laptop']=laptop
+#             context['grocery']=grocery
+#             context['mobile']=mobile
+#     else:
+#             laptop=None
+#             mobile=None
+#             grocery=None
+#     print("context is :      \n\n",context)
+#     # context={'laptop':laptop,'mobile':mobile,'grocery':grocery,'record':record,'Model':Model}
+#     return render(request,'Customer/universal_search.html',context)
+
+
+
 def universal_search(request):
     query=request.GET.get('searchquery')
-    print(query,type(query))
     all_models=[model.__name__ for model in apps.get_models()]
-    print("\n\n  All model name:  ",[i for i in all_models])
     context={}
+    result=''
+    query_str=query.split(' ')
+    print(query_str)
+    for elem in query_str:
+    # capitalize first letter of each word and add to a string
+        if len(result) > 0:
+            result = result + " " + elem.strip().capitalize()
+        else:
+            result = elem.capitalize()
+    record=set()
+    record_new=set()
     for i in all_models:
-        result=''
-        query_str=query.split(' ')
-        for elem in query_str:
-        # capitalize first letter of each word and add to a string
-            if len(result) > 0:
-                result = result + " " + elem.strip().capitalize()
-            else:
-                result = elem.capitalize()
-        if i.find(result) != -1 :   
-            print("inside if loop model name:")
-            Model = apps.get_model('Seller', query)
-            print(Model)
-            record=Model.objects.all()   
-            for i in record:
-                print(i) 
+        if result.find(i) != -1 :   
+            Model = apps.get_model('Seller', i)
+            record.add(Model.objects.all())
+            print(f'type of record is printed:  {type(record)}')  
+            print("record length:    ",len(record))
             context['Model']=Model.__name__
             print("Model Name is:   ",context['Model'])
-            context['record']=record
-    if query:
-            vector1=SearchVector('name','RAM','ROM','brand_name','processor','OS')
-            print(vector1)
-            vector2=SearchVector('name','RAM','ROM','brand_name','processor')
-            print(vector2)
-            vector3=SearchVector('product_name')
-            print(vector3)
-
-            query=SearchQuery(query)
-            print(query)
-            laptop=Laptop.objects.annotate(search=vector1).filter(search=query)
-            mobile=Mobile.objects.annotate(search=vector2).filter(search=query)
-            grocery=Grocery.objects.annotate(search=vector3).filter(search=query)
-            print("laptop","\n",len(laptop),laptop)
-            print("mobile","\n",len(mobile),mobile)
-            print("grocery","\n",len(grocery),grocery)
-            context['laptop']=laptop
-            context['grocery']=grocery
-            context['mobile']=mobile
-    else:
-            laptop=None
-            mobile=None
-            grocery=None
+    for j in record:
+        for i in result.split(' '):
+            laptop=Laptop.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i)|Q(OS__icontains=i))
+            mobile=Mobile.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i))
+            grocery=Grocery.objects.filter(Q(product_name__icontains=i))
+            record_new.add(laptop)
+            record_new.add(mobile)
+            record_new.add(grocery)
+            # if j not in laptop:
+            #     record.remove(j)
+            # if j not in mobile:
+            #     record.remove(j)
+            # if j not in grocery:
+            #     record.remove(j)
 
     
-    print("context is :      \n\n",context)
-    # context={'laptop':laptop,'mobile':mobile,'grocery':grocery,'record':record,'Model':Model}
-    return render(request,'Customer/universal_search.html',context)
+    for i in result.split(' '):
+        laptop=Laptop.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i)|Q(OS__icontains=i))
+        mobile=Mobile.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i))
+        grocery=Grocery.objects.filter(Q(product_name__icontains=i))
+        record_new.add(laptop)
+        record_new.add(mobile)
+        record_new.add(grocery)
 
+    context['record']=record
+    context['record_new']=record_new
+    for i in record_new:
+        for j in i:
+            print(f"record_new  {j}")
+
+
+    print()
+    for i in record:
+        for j in i:
+            print("record",j)
+
+
+
+
+
+    return render(request,'Customer/universal_search.html',context)
