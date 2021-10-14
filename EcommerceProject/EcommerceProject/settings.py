@@ -31,18 +31,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+# 'django.contrib.postgres'
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django.contrib.postgres',
     'Accounts',
     'Seller',
     'Customer',
     'crispy_forms',
     'django_filters',
+
+
 ]
 
 CRISPY_TEMPLATE_PACK='bootstrap4'
@@ -92,17 +94,6 @@ DATABASES = {
         # 'NAME': 'EcommerceProject',
         # 'USER':'root',
         # 'PASSWORD':'root123'
-
-
-        # Setting for postgresql
-
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #    'NAME': 'oyfgxhhf',
-    #    'USER': 'oyfgxhhf',
-    #    'PASSWORD': 'tRbKGQHSGc6SI3R5uD4RBpBQHczzXdE2',
-    #    'HOST': 'fanny.db.elephantsql.com',
-    #    'PORT': 5432,
-    #    postgres://oyfgxhhf:tRbKGQHSGc6SI3R5uD4RBpBQHczzXdE2@/oyfgxhhf
     }
 }
 
@@ -158,10 +149,9 @@ import os
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
 
 MEDIA_URL='/media/'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS= True
 EMAIL_PORT = 587
 EMAIL_HOST_USER= 'kusumdipke@gmail.com'
-EMAIL_HOST_PASSWORD='9175642103'
+EMAIL_HOST_PASSWORD='Kusum@123'

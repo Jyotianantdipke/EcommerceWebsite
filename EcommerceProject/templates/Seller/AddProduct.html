@@ -1,4 +1,4 @@
-{% extends 'Seller/Seller_Base.html' %}
+{% extends 'Accounts/Base.html' %}
 {% load crispy_forms_tags %}
 {% block title %}
     <title>Add Product</title>
@@ -9,13 +9,13 @@
     <div class="jumbotron">
       <h2>Select Category to add product in :  </h2>
       <button>
-        <a href="{% url 'createlaptop' %}">Laptop</a>
+        <a href="{% url 'addlaptop' %}">Laptop</a>
       </button>
       <button>
-        <a href="{% url 'createmobile' %}">Mobile</a>
+        <a href="{% url 'addmobile' %}">Mobile</a>
       </button>
       <button>
-        <a href="{% url 'creategrocery' %}">Grocery</a>
+        <a href="{% url 'addgrocery' %}">Grocery</a>
       </button>
       </div>
     </div>

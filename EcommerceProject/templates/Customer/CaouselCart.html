@@ -1,123 +1,297 @@
-<style>
-  .col-md-3 {
-    display: inline-block;
-    margin-left: -4px;
-  }
+ <style>
+        .col-md-3 {
+            display: inline-block;
+            margin-left: -4px;
+        }
 
-  .col-md-3 {
-    width: 100%;
-    height: auto;
-  }
+        .col-md-3 {
+            width: 100%;
+            height: auto;
+        }
 
-  body .carousel-control-indicator li {
-    background-color: blue;
-  }
+        body .carousel-control-indicator li {
+            background-color: blue;
+        }
 
-  body .carousel-control-prev-icon body .carousel-control-next-icon {
-    background-color: blue;
-  }
+        body .carousel-control-prev-icon body .carousel-control-next-icon {
+            background-color: blue;
+        }
 
-  body .no-padding {
-    padding-left: 0;
-    padding-right: 0;
-  }
+        body .no-padding {
+            padding-left: 0;
+            padding-right: 0;
+        }
 
-  .carousel-control-prev-icon {
-    background: black no-repeat center center;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e");
-  }
+        .carousel-control-prev-icon {
+            background: black no-repeat center center;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e");
+        }
 
-  .carousel-control-next-icon {
-    background: black no-repeat center center;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3e%3c/svg%3e");
+        .carousel-control-next-icon {
+            background: black no-repeat center center;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3e%3cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3e%3c/svg%3e");
 
-  }
+        }
+        body .carousel-indicators{
+        bottom:0;
+        }
 
-  body .carousel-indicators {
-    bottom: 0;
-  }
-
-  .carousel-indicators .active {
-    background-color: blue;
-  }
-</style>
+        .carousel-indicators .active{
+        background-color: blue;
+        }
 
 
-<div class="container">
-  <h2>Laptops</h2>
-  <div class="row">
-    {% for l in Laptops %}
-    <div class="col-lg-4">
+    </style>
+
+
+<!--        carousel indicators starts from here-->
+
+<!--    <div class="container">-->
+<!--        <div id="demo" class="carousel slide my-3" data-ride="carousel">-->
+<!--    <ul class="carousel-indicators">-->
+<!--      <li data-target="#demo" data-slide-to="0" class="active"></li>-->
+<!--      <li data-target="#demo" data-slide-to="1" ></li>-->
+<!--      <li data-target="#demo" data-slide-to="2" ></li>-->
+<!--    </ul>-->
+
+<!--          <div class="carousel-inner">-->
+<!--            <div class="carousel-item active">-->
+<!--              <div class="row">-->
+<!--                <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--                  <div class="card" style="width: 18rem;">-->
+<!--                    <img src="https://source.unsplash.com/1000x500/?Fashion,fruits" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5 class="card-title">Card title</h5>-->
+<!--                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--                        card's content.</p>-->
+<!--                      <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--                  <div class="card" style="width: 18rem;">-->
+<!--                    <img src="https://source.unsplash.com/1000x500/?fruits,grocery,electronics" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5 class="card-title">Card title</h5>-->
+<!--                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--                        card's content.</p>-->
+<!--                      <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--                  <div class="card" style="width: 18rem;">-->
+<!--                    <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5 class="card-title">Card title</h5>-->
+<!--                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--                        card's content.</p>-->
+<!--                      <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--                  <div class="card" style="width: 18rem;">-->
+<!--                    <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5 class="card-title">Card title</h5>-->
+<!--                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--                        card's content.</p>-->
+<!--                      <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+
+<!--            <div class="carousel-item">-->
+<!--              <div class="row">-->
+<!--                <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--                  <div class="card" style="width: 18rem;">-->
+<!--                    <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5 class="card-title">Card title</h5>-->
+<!--                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--                        card's content.</p>-->
+<!--                      <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--                  <div class="card" style="width: 18rem;">-->
+<!--                    <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5 class="card-title">Card title</h5>-->
+<!--                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--                        card's content.</p>-->
+<!--                      <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--                  <div class="card" style="width: 18rem;">-->
+<!--                    <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5 class="card-title">Card title</h5>-->
+<!--                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--                        card's content.</p>-->
+<!--                      <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--                  <div class="card" style="width: 18rem;">-->
+<!--                    <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--                    <div class="card-body">-->
+<!--                      <h5 class="card-title">Card title</h5>-->
+<!--                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--                        card's content.</p>-->
+<!--                      <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+
+<!--            <div class="carousel-item">-->
+
+<!--              <div class="row">-->
+<!--      <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--        <div class="card" style="width: 18rem;">-->
+<!--          <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--          <div class="card-body">-->
+<!--            <h5 class="card-title">Card title</h5>-->
+<!--            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--              card's content.</p>-->
+<!--            <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--        <div class="card" style="width: 18rem;">-->
+<!--          <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--          <div class="card-body">-->
+<!--            <h5 class="card-title">Card title</h5>-->
+<!--            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--              card's content.</p>-->
+<!--            <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--        <div class="card" style="width: 18rem;">-->
+<!--          <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--          <div class="card-body">-->
+<!--            <h5 class="card-title">Card title</h5>-->
+<!--            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--              card's content.</p>-->
+<!--            <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-xs-3 col-sm-3 col-md-3">-->
+<!--        <div class="card" style="width: 18rem;">-->
+<!--          <img src="https://source.unsplash.com/1000x500/?Laptop,Mobile" class="card-img-top" alt="...">-->
+<!--          <div class="card-body">-->
+<!--            <h5 class="card-title">Card title</h5>-->
+<!--            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the-->
+<!--              card's content.</p>-->
+<!--            <a href="#" class="btn btn-primary">Go somewhere</a>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    <a class="carousel-control-prev " href="#demo" role="button" data-slide="prev">-->
+<!--        <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+<!--        <span class="sr-only">Previous</span>-->
+<!--      </a>-->
+<!--      <a class="carousel-control-next" href="#demo" role="button" data-slide="next">-->
+<!--        <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+<!--        <span class="sr-only">Next</span>-->
+<!--      </a>-->
+
+<!-- <br><br><br>-->
+
+ <div class="container">
+   <h2>Laptops</h2>
+ <div class="row">
+  {% for l in Laptops %}
+   <div class="col-lg-4">
       <div class="card" style="width: 30rem;">
         <img src="{{l.image.url}}" width="{{380}}" height="{{200}}" class="card-img-top" alt="...">
         <div class="card-body" style="text-align:center">
           <h3 class="card-title">{{l.brand_name}} {{l.name}}</h3>
           <h5 class="card-text">{{l.RAM}} GB RAM | {{l.ROM}} GB ROM</h5>
-          <h5 class="card-text">11th Gen {{l.processor}} Processor</h5>
-          <h5 class="card-text">{{l.warranty}} Year Warranty</h5>
-          <h4 class="card-text">Price: {{l.price}} Rs</h4>
+            <h5 class="card-text">11th Gen {{l.processor}} Processor</h5>
+            <h5 class="card-text">{{l.warranty}} Year Warranty</h5>
+            <h4 class="card-text">Price: {{l.price}} Rs</h4>
           <a href="" class="btn btn-primary">View</a>
-          <!--          <hr>-->
-<!--          <a href="" class="btn btn-primary">Add to Cart</a>-->
-          <a href="{% url 'customerlaptopitem' l.pk %}" class="btn btn-success">Add to Cart</a>
+<!--          <hr>-->
+          <a href="" class="btn btn-primary">Add to Cart</a>
         </div>
       </div>
-      <br>
-    </div>
-    {% endfor %}
-  </div>
-</div>
+       <br>
+     </div>
+   {% endfor %}
+   </div>
+   </div>
 
 
 <br>
-<hr>
+ <hr>
 
-<div class="container">
-  <h2>Smartphones</h2>
-  <div class="row">
-    {% for m in Mobiles %}
-    <div class="col-lg-4">
+  <div class="container">
+   <h2>Smartphones</h2>
+ <div class="row">
+  {% for m in Mobiles %}
+   <div class="col-lg-4">
       <div class="card" style="width: 30rem;">
         <img src="{{m.image.url}}" width="{{30}}" height="{{200}}" class="card-img-top" alt="...">
         <div class="card-body" style="text-align:center">
           <h3 class="card-title">{{m.brand_name}} {{m.name}}</h3>
           <h5 class="card-text">{{m.RAM}} GB RAM | {{m.ROM}} GB ROM </h5>
-          <h5 class="card-text">{{m.processor}} Processor}</h5>
-          <h5 class="card-text">{{m.warranty}} Year Handset Warranty</h5>
-          <h4 class="card-text">Price: {{m.price}} Rs</h4>
+            <h5 class="card-text">{{m.processor}} Processor}</h5>
+            <h5 class="card-text">{{m.warranty}} Year Handset Warranty</h5>
+            <h4 class="card-text">Price: {{m.price}} Rs</h4>
           <a href="" class="btn btn-primary">View</a>
-          <!--          <hr>-->
-          <a href="{% url 'customermobileitem' m.pk %}" class="btn btn-primary">Add to Cart</a>
+<!--          <hr>-->
+          <a href="" class="btn btn-primary">Add to Cart</a>
         </div>
       </div>
-      <br>
-    </div>
-    {% endfor %}
-  </div>
-</div>
+       <br>
+     </div>
+   {% endfor %}
+   </div>
+   </div>
 
-<br>
-<hr>
+ <br>
+ <hr>
 
-<div class="container">
-  <h2>Buy Grocery</h2>
-  <div class="row">
-    {% for g in Groceries %}
-    <div class="col-lg-4">
+  <div class="container">
+   <h2>Buy Grocery</h2>
+ <div class="row">
+  {% for m in Groceries %}
+   <div class="col-lg-4">
       <div class="card" style="width: 30rem;">
-        <img src="{{g.image.url}}" width="{{350}}" height="{{200}}" class="card-img-top" alt="...">
+        <img src="{{m.image.url}}" width="{{350}}" height="{{200}}" class="card-img-top" alt="...">
         <div class="card-body" style="text-align:center">
-          <h3 class="card-title">{{g.product_name}}</h3>
-          <h5 class="card-text">{{g.quantity}} Kg</h5>
-          <h4 class="card-text">Price : {{g.price}} Rs.</h4>
+          <h3 class="card-title">{{m.product_name}}</h3>
+          <h5 class="card-text">{{m.quantity}} Kg</h5>
+              <h4 class="card-text">Price : {{m.price}} Rs.</h4>
 
           <a href="" class="btn btn-primary">View</a>
-          <!--          <hr>-->
-          <a href="{% url 'customergroceryitem' g.pk %}" class="btn btn-primary">Add to Cart</a>
+<!--          <hr>-->
+          <a href="" class="btn btn-primary">Add to Cart</a>
         </div>
       </div>
-      <br>
-    </div>
-    {% endfor %}
-  </div>
-</div>
+       <br>
+     </div>
+   {% endfor %}
+   </div>
+   </div>

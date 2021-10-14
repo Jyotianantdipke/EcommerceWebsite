@@ -1,24 +1,23 @@
-{% extends 'Customer/Customer_Base.html' %}
+{% extends 'Accounts/Base.html' %}
 
 {% block title %}
-<title>Cart</title>
+    <title>Cart</title>
 {% endblock %}
 
 {% block content %}
 <h2 style="text-align:center">YOUR CART</h2>
 {% for lap in ord %}
 
-{% if lap.laptop %}
-<div style="margin:3% 25%;">
+    {% if lap.laptop %}
+    <div style="margin:3% 25%;">
     <div class="card mb-3">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="{{lap.laptop.image.url}}" style="width:100%;height: 100%;" class="img-fluid rounded-start"
-                    alt="Image Not Found">
+                <img src="{{lap.laptop.image.url}}" style="width:100%;height: 100%;" class="img-fluid rounded-start" alt="Image Not Found">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <!--                    <h5 class="card-title"><b>{{lap.customer}}</b></h5>-->
+<!--                    <h5 class="card-title"><b>{{lap.customer}}</b></h5>-->
                     <h3 class="card-text">{{product_name_l}}</h3>
                     <h4 class="card-text">Price : {{lap.price}}</h4>
                     <h4 class="card-text">Quantity : {{lap.quantity}}</h4>
@@ -28,50 +27,47 @@
             </div>
         </div>
     </div>
-</div>
-{% elif lap.mobile %}
-<div style="margin:3% 25%;">
+    </div>
+    {% elif lap.mobile %}
+    <div style="margin:3% 25%;">
     <div class="card mb-3">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="{{lap.mobile.image.url}}" style="width:100%;height: 100%;" class="img-fluid rounded-start"
-                    alt="Image Not Found">
+                <img src="{{lap.mobile.image.url}}" style="width:100%;height: 100%;" class="img-fluid rounded-start" alt="Image Not Found">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <!--                    <h5 class="card-title"><b>{{lap.customer}}</b></h5>-->
-                    <h4 class="card-text">{{product_name_m.name}}</h4>
-                    <h4 class="card-text">Price: {{lap.price}}</h4>
-                    <h4 class="card-text">Quantity: {{lap.quantity}}</h4>
+<!--                    <h5 class="card-title"><b>{{lap.customer}}</b></h5>-->
+                    <p class="card-text">{{product_name_m}}</p>
+                    <p class="card-text">{{lap.price}}</p>
+                    <p class="card-text">{{lap.quantity}}</p>
+                    <a href="{% url 'customerupdateitem' lap.id %}"><button class="btn btn-warning">Add</button></a>
+                    <a href="{% url 'deleteitem' lap.id %}"><button class="btn btn-danger">Remove</button></a>                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    {% elif lap.grocery %}
+    <div style="margin:3% 25%;">
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{lap.grocery.image.url}}" style="width:100%;height: 100%;" class="img-fluid rounded-start" alt="Image Not Found">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+<!--                    <h5 class="card-title"><b>{{lap.customer}}</b></h5>-->
+                    <p class="card-text">{{product_name_g}}</p>
+                    <p class="card-text">{{lap.price}}</p>
+                    <p class="card-text">{{lap.quantity}}</p>
                     <a href="{% url 'customerupdateitem' lap.id %}"><button class="btn btn-warning">Add</button></a>
                     <a href="{% url 'deleteitem' lap.id %}"><button class="btn btn-danger">Remove</button></a>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% elif lap.grocery %}
-<div style="margin:3% 25%;">
-    <div class="card mb-3">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <img src="{{lap.grocery.image.url}}" style="width:100%;height: 100%;" class="img-fluid rounded-start"
-                    alt="Image Not Found">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <!--                    <h5 class="card-title"><b>{{lap.customer}}</b></h5>-->
-                    <h4 class="card-text">{{product_name_g}}</h4>
-                    <h4 class="card-text">Price:{{lap.price}}</h4>
-                    <h4 class="card-text">Quantity:{{lap.quantity}}</h4>
-                    <a href="{% url 'customerupdateitem' lap.id %}"><button class="btn btn-warning">Add</button></a>
-                    <a href="{% url 'deleteitem' lap.id %}"><button class="btn btn-danger">Remove</button></a>
-                </div>
-            </div>
-        </div>
     </div>
-</div>
-{% endif %}
+    {% endif %}
 
 {% endfor %}
 

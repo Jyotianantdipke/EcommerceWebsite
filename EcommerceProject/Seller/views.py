@@ -1,54 +1,47 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+
+from .forms import MobileModelForm, LaptopModelForm, GroceryModelForm
 from .models import Laptop, Mobile, Grocery
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .forms import MobileModelForm, GroceryModelForm, LaptopModelForm
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from .filters import LaptopFilter
 from Accounts.models import CustomUser, Seller
 from faker import Faker
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+# import Faker
+
 
 
 # Create your views here.
-def customer_to_seller_home(request):
-    logout(request)
-    return redirect('sellerhome')
+def homeview(request):
+    template_name='Accounts/home.html'
+    Laptops=Laptop.objects.all()
+    Mobiles=Mobile.objects.all()
+    Groceries=Grocery.objects.all()
 
-def seller_home(request):
-    template_name='Seller/Seller_Home.html'
-    context={}
+    context={'Laptops':Laptops, 'Mobiles':Mobiles, 'Groceries':Groceries}
     return render(request,template_name,context)
 
+# CRUD for SELLER-LAPTOP
+# @login_required(login_url='sellerlogin')
+# class LaptopListView(ListView):
+#     model = Laptop
+#     # filterset_class = LaptopFilter
 
-def add_product_view(request):
-    return render(request, 'Seller/AddProduct.html',{} )
 
 
+def AddProductView(request):
+    return render(request, 'Seller/AddProduct.html' )
+
+
+# @login_required(login_url='sellerlogin')
 # class LaptopCreateView(CreateView):
 #     model = Laptop
 #     fields = '__all__'
 #     success_url = reverse_lazy('lshow')
-
-@login_required(login_url='sellerlogin')
-def add_laptop(request):
-    form = LaptopModelForm()
-    if request.method == 'POST':
-        form = LaptopModelForm(request.POST)
-        if form.is_valid():
-            seller_user = Seller.objects.get(user=request.user)
-            print(seller_user)
-            object = form.save(commit=False)
-            object.seller = seller_user
-            object.save()
-            return redirect('showallproducts')
-    template_name='Seller/Laptop_form.html'
-    context={'form':form}
-    return render(request, template_name, context)
-
 
 @login_required(login_url='sellerlogin')
 def createFakeLaptop(request):
@@ -77,31 +70,15 @@ def createFakeLaptop(request):
             p=fake.random_element(Price)
             so=fake.random_number(digits=2)
             Laptop.objects.create(seller=seller, name=m,brand_name=b, RAM=ra, ROM=ro, processor=pr, OS=os, warranty=w, price=p, stock=so)
-        return redirect('showallproducts')
+        return redirect('showselleresproduct')
+
+
+
+
 
 
 @login_required(login_url='sellerlogin')
-def update_laptop(request, id):
-    record = Laptop.objects.get(id=id)
-    form = LaptopModelForm(instance=record)
-    if request.method == 'POST':
-        form = LaptopModelForm(request.POST, instance=record)
-        if form.is_valid():
-            form.save()
-            return redirect('showallproducts')
-    template_name = 'Seller/Laptop_form.html'
-    context = {'form': form}
-    return render(request, template_name, context)
-
-@login_required(login_url='sellerlogin')
-def delete_laptop(request,id):
-    record = Laptop.objects.get(id=id)
-    record.delete()
-    return redirect('showallproducts')
-
-
-@login_required(login_url='sellerlogin')
-def add_mobile(request):
+def addmobile(request):
     form = MobileModelForm()
     if request.method == 'POST':
         form = MobileModelForm(request.POST)
@@ -111,10 +88,44 @@ def add_mobile(request):
             object = form.save(commit=False)
             object.seller = seller_user
             object.save()
-            return redirect('showallproducts')
+            return redirect('showselleresproduct')
     template_name='Seller/Mobile_form.html'
     context={'form':form}
     return render(request, template_name, context)
+
+
+@login_required(login_url='sellerlogin')
+def addgrocery(request):
+    form = GroceryModelForm()
+    if request.method == 'POST':
+        form = GroceryModelForm(request.POST)
+        if form.is_valid():
+            seller_user = Seller.objects.get(user=request.user)
+            print(seller_user)
+            object = form.save(commit=False)
+            object.seller = seller_user
+            object.save()
+            return redirect('showselleresproduct')
+    template_name='Seller/Grocery_form.html'
+    context={'form':form}
+    return render(request, template_name, context)
+
+@login_required(login_url='sellerlogin')
+def addlaptop(request):
+    form = LaptopModelForm()
+    if request.method == 'POST':
+        form = LaptopModelForm(request.POST)
+        if form.is_valid():
+            seller_user = Seller.objects.get(user=request.user)
+            print(seller_user)
+            object = form.save(commit=False)
+            object.seller = seller_user
+            object.save()
+            return redirect('showselleresproduct')
+    template_name='Seller/Laptop_form.html'
+    context={'form':form}
+    return render(request, template_name, context)
+
 
 
 @login_required(login_url='sellerlogin')
@@ -147,47 +158,13 @@ def createFakeMobile(request):
             p=fake.random_element(Price)
             so = fake.random_number(digits=2)
             Mobile.objects.create(seller=seller,name=m,brand_name=b, RAM=ra, ROM=ro, processor=pr, warranty=w, price=p, stock=so)
-        return redirect('showallproducts')
+        return redirect('showselleresproduct')
 
 
-@login_required(login_url='sellerlogin')
-def update_mobile(request, id):
-    print('ID=',id)
-    record = Mobile.objects.get(id=id)
-
-    form = MobileModelForm(instance=record)
-    if request.method == 'POST':
-        form = MobileModelForm(request.POST, instance=record)
-        if form.is_valid():
-            form.save()
-            return redirect('showallproducts')
-    template_name = 'Seller/Mobile_form.html'
-    context = {'form': form}
-    return render(request, template_name, context)
-
-@login_required(login_url='sellerlogin')
-def delete_mobile(request,id):
-    record = Mobile.objects.get(id=id)
-    record.delete()
-    return redirect('showallproducts')
 
 
-# CRUD for GROCERY
-@login_required(login_url='sellerlogin')
-def add_grocery(request):
-    form = GroceryModelForm()
-    if request.method == 'POST':
-        form = GroceryModelForm(request.POST)
-        if form.is_valid():
-            seller_user = Seller.objects.get(user=request.user)
-            print(seller_user)
-            object = form.save(commit=False)
-            object.seller = seller_user
-            object.save()
-            return redirect('showallproducts')
-    template_name='Seller/Grocery_form.html'
-    context={'form':form}
-    return render(request, template_name, context)
+
+
 
 
 @login_required(login_url='sellerlogin')
@@ -212,39 +189,85 @@ def createFakeGrocery(request):
             w = fake.random_element(WARRANTY)
             # s = fake.random_element(SELLER)
             Grocery.objects.create(seller=seller, product_name=n,quantity=q, price=p, warranty=w)
-        return redirect('showallproducts')
+        return redirect('showselleresproduct')
+
+
+
+
+
 
 
 @login_required(login_url='sellerlogin')
-def update_grocery(request, id):
-    record = Grocery.objects.get(id=id)
-    form = GroceryModelForm(instance=record)
-    if request.method == 'POST':
-        form = GroceryModelForm(request.POST, instance=record)
-        if form.is_valid():
-            form.save()
-            return redirect('showallproducts')
-    template_name = 'Seller/Grocery_form.html'
-    context = {'form': form}
-    return render(request, template_name, context)
+def delete_laptop(request,id):
+    
+    record = Laptop.objects.get(id=id)
+    
+    record.delete()
+    return redirect('showselleresproduct')
+
+@login_required(login_url='sellerlogin')
+def delete_mobile(request,id):
+    record = Mobile.objects.get(id=id)
+    record.delete()
+    return redirect('showselleresproduct')
 
 @login_required(login_url='sellerlogin')
 def delete_grocery(request,id):
     record = Grocery.objects.get(id=id)
     record.delete()
-    return redirect('showallproducts')
+    return redirect('showselleresproduct')
 
 
-# Show All Products added by Seller
+
 @login_required(login_url='sellerlogin')
-def show_all_products(request):
+def update_mobile(request, id):
+    record = Mobile.objects.get(id=id)
+    form = MobileModelForm(instance=record)
+    if request.method == 'POST':
+        form = MobileModelForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('showsellerproduct')
+    template_name = 'Seller/Mobile_form.html'
+    context = {'form': form}
+    return render(request, template_name, context)
+
+
+@login_required(login_url='sellerlogin')
+def update_laptop(request, id):
+    record = Laptop.objects.get(id=id)
+    form = LaptopModelForm(instance=record)
+    if request.method == 'POST':
+        form = LaptopModelForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('showsellerproduct')
+    template_name = 'Seller/Laptop_form.html'
+    context = {'form': form}
+    return render(request, template_name, context)
+
+
+@login_required(login_url='sellerlogin')
+def update_grocery(request, id):
+    record = Laptop.objects.get(id=id)
+    form = GroceryModelForm(instance=record)
+    if request.method == 'POST':
+        form = GroceryModelForm(request.POST, instance=record)
+        if form.is_valid():
+            form.save()
+            return redirect('showsellerproduct')
+    template_name = 'Seller/Grocery_form.html'
+    context = {'form': form}
+    return render(request, template_name, context)
+
+
+@login_required(login_url='sellerlogin')
+def show_product_seller(request):
     user = request.user
     seller=Seller.objects.get(user=user)
     laptop = Laptop.objects.filter(seller=seller)
     mobile = Mobile.objects.filter(seller=seller)
     grocery=Grocery.objects.filter(seller=seller)
     context = {'laptop': laptop,'mobile': mobile,'grocery':grocery}
-    template_name = 'Seller/Show_All_Products.html'
+    template_name = 'Seller/showseller_product.html'
     return render(request, template_name, context)
-
-

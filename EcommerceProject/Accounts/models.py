@@ -1,5 +1,4 @@
-
-from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 # from django.utils.translation import ugettext_lazy as _
@@ -11,7 +10,7 @@ class CustomUser(AbstractUser):
     username = None
     # email = models.EmailField(_('email address'), unique=True)
     email = models.EmailField(unique=True)
-    mobile_no=models.BigIntegerField(unique=True)
+    mobile_no=models.IntegerField(unique=True,validators=[MinValueValidator(1000000000, "The Mobile number must contains 10 digits only."),MaxValueValidator(9999999999,"The Mobile number must contains 10 digits only.")])
     is_customer=models.BooleanField(default=False)
     is_seller=models.BooleanField(default=False)
 
@@ -21,7 +20,7 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.self
 
 
 class Customer(models.Model):

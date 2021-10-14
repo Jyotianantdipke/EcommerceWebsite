@@ -1,25 +1,18 @@
-{% extends 'Seller/Seller_Base.html' %}
 
-{% load crispy_forms_tags %}
-
-{% block title %}
-    <title>Seller Login</title>
-{% endblock %}
-
-{% block content %}
-<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Register</title>
+</head>
+<body>
     <h3>Seller Register</h3>
-    <form method="POST" class="jumbotron">
+    <form method="POST">
         {% csrf_token %}
-        {{form|crispy}}
-        <button type="submit" class="btn btn-success">Register</button>
+        {{form.as_p}}
+        <button type="submit">Register</button>
     </form>
-            <div class="form-inline" style="text-align:center">
-              <div class="form-group mb-2">
-                <label for="staticEmail2" class="sr-only">Email</label>
-                <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="Already have an Account ? ">
-              </div>
-                <a href="{% url 'sellerlogin' %}"><button class="btn btn-primary mb-2">Login</button></a>
-            </div>
-</div>
-{% endblock content %}
+</body>
+</html>
