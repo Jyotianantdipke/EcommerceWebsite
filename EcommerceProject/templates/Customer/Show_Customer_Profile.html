@@ -1,0 +1,25 @@
+{% extends 'Customer/Profile_Base.html' %}
+
+{% block InnerContent %}
+
+<h1>Show profile page</h1>
+{% if record|length == 0 %}
+<h1>Profile is not created yet Please click on given button for create your profile</h1>
+<a href="{% url 'createprofile' %}"><input type="submit" value="Create Profile"></a>
+{% else %}
+{% for i in record %}
+<h3>profile information</h3>
+    <h4>Name:{{i.first_name}} {{i.last_name}}</h4>
+    {{i.gender}}
+    {{i.DOB}}
+    <a href="{% url 'updateprofile' i.id %}">
+        <button>Updateprofile</button>
+    </a>
+    {% endfor %}
+    
+{% endif %}
+
+<br><br><br>
+<a href="{% url 'changepasswordcustomer' %}"> Change password</a>
+
+{% endblock %}

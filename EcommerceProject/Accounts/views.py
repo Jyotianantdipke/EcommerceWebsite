@@ -1,64 +1,80 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
-from django.shortcuts import redirect, render
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
 
+from django.http.response import HttpResponse
+from django.shortcuts import redirect, render
+import math, random
+from django.views.generic import View
+from django.contrib.auth import login, update_session_auth_hash
 from .models import CustomUser, Customer, Seller
 from .forms import CustomerCreationForm, SellerCreationForm
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import authenticate, login, logout
+from django.core.mail import EmailMessage, send_mail
 
 
-def customer_registerview(request, account_activation_token=None):
+def customer_registerview(request):
     form = CustomerCreationForm()
     if request.method == 'POST':
         form = CustomerCreationForm(request.POST)
         if form.is_valid():
-            obj=form.save(commit=False)
-            obj.is_active=False
-            obj.save()
-            # current_site = get_current_site(request)
-            # mail_subject = 'Activate your blog account.'
-            # message = render_to_string('acc_active_email.html', {
-            #     'user': obj,
-            #     'domain': current_site.domain,
-            #     'uid': urlsafe_base64_encode(force_bytes(obj.pk)),
-            #     'token': account_activation_token.make_token(obj),
-            # })
-            # to_email = form.cleaned_data.get('email')
-            # email = EmailMessage(
-            #     mail_subject, message, to=[to_email]
-            # )
-            # email.send()
-            return redirect('customerlogin')
-    template_name = 'Accounts/register.html'
+            form.save()
+            return redirect('emailverify')
+    template_name = 'Accounts/CustomerRegister.html'
     context = {'form': form}
     return render(request, template_name, context)
 
 
+
+def email_verification(request):
+    return render(request, 'Accounts/Email_verification.html')
+
+
+
+def customuser_activation(request):
+   
+        email=request.POST.get('email')
+        print("Entered Email:    ",email)
+        user=CustomUser.objects.get(email=email)
+        user.is_active=True
+        print("Database User   ",user.email)
+        user.save()
+        if user.is_customer==True:
+            return redirect('customerlogin')
+        else:
+            return redirect('sellerlogin')
+   
+
+
+
+
 def customer_loginview(request):
-    logout(request)
-    if request.method == 'POST':
-        no = request.POST.get('mobile')
-        p = request.POST.get('password')
-        user = authenticate(username=no, password=p)
-        if user and user.is_customer:
-            login(request, user)
-            return redirect('home')
-        messages.error(request, 'You are not a customer')
-    template_name = 'Accounts/login.html'
-    context = {}
-    return render(request, template_name, context)
-
-
-def customer_logout_view(request):
-    logout(request)
-    return redirect('customerlogin')
-
+    try:
+        if request.method == 'POST':
+            no = request.POST.get('mobile')
+            p = request.POST.get('password')
+            try:
+                customer=CustomUser.objects.get(mobile_no=no)
+            except CustomUser.DoesNotExist:
+                messages.error(request,"Please check mobile no, this No is not registered ")
+                return redirect('customerlogin')
+            if customer.is_active==True:
+                user=authenticate(username=no,password=p)
+                if user and user.is_customer:
+                    login(request, user)
+                    return redirect('home')
+                else:
+                    messages.error(request, 'Invalid Credentials!')
+                    return redirect('customerlogin')
+            else:
+                messages.error(request, 'Your Account is not activated yet, please provide email to activate')
+                return redirect('emailverify')
+        
+        template_name = 'Accounts/CustomerLogin.html'
+        context = {}
+        return render(request, template_name, context)
+    except Customer.DoesNotExist:
+        return redirect('logout')
 
 
 def seller_registerview(request):
@@ -67,34 +83,52 @@ def seller_registerview(request):
         form = SellerCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('sellerlogin')
+            return redirect('emailverify')
     template_name = 'Accounts/sellerregister.html'
     context = {'form': form}
     return render(request, template_name, context)
 
 
 def seller_loginview(request):
+    try:
+        if request.method == 'POST':
+            no=request.POST.get('mobile')
+            p=request.POST.get('password')
+            try:
+                seller=CustomUser.objects.get(mobile_no=no)
+            except CustomUser.DoesNotExist:
+                messages.error(request,"Please check mobile no, this No is not registered ")
+                return redirect('customerlogin')
+            if seller.is_active:
+                user=authenticate(username=no,password=p)
+                if user and user.is_seller:
+                    login(request,user)
+                    return redirect('addproduct')
+                else:
+                    messages.error(request,'Invalid Credentials!')
+                    return redirect('sellerlogin')
+            else:
+                messages.error(request,'Your Account is not activated yet, please provide email to activate')
+                return redirect('emailverify')
+    except Seller.DoesNotExist:
+        return redirect('sellerlogout')
+    
+    template_name='Accounts/SellerLogin.html'
+    context={}
+    return render(request,template_name,context)
+
+def customer_logout_view(request):
     logout(request)
-    if request.method == 'POST':
-        no = request.POST.get('mobile')
-        p = request.POST.get('password')
-        user = authenticate(username=no, password=p)
-        if user and user.is_seller:
-            login(request, user)
-            return redirect('addproduct')
-        messages.error(request, 'You are not a Seller')
-    template_name = 'Accounts/SellerLogin.html'
-    context = {}
-    return render(request, template_name, context)
+    return redirect('home')
 
 
 def seller_logout_view(request):
     logout(request)
-    return redirect('sellerlogin')
+    return redirect('sellerhome')
 
 
 @login_required(login_url='customerlogin')
-def change_pass_view(request):
+def change_pass_view_customer(request):
     form = PasswordChangeForm(request.user)
     if request.method == 'POST':
         form = PasswordChangeForm(request.user,request.POST)
@@ -106,23 +140,48 @@ def change_pass_view(request):
         else:
             messages.error(request, 'Check the fields')
 
-    template_name = 'Accounts/changepassword.html'
+    template_name = 'Customer/changepassword.html'
     context = {'form': form}
     return render(request, template_name, context)
 
 
-# def generateOTP():
-#     digits = "0123456789"
-#     OTP = ""
-#     for i in range(4):
-#         OTP += digits[math.floor(random.random() * 10)]
-#     return OTP
-#
-#
-# def send_otp(request):
-#     email = request.GET.get("email")
-#     print(email)
-#     o = generateOTP()
-#     htmlgen = '<p>Your OTP is <strong>o</strong></p>'
-#     send_mail('OTP request', o, '<your gmail id>', [email], fail_silently=False, html_message=htmlgen)
-#     return HttpResponse(o)
+
+
+@login_required(login_url='customerlogin')
+def change_pass_view_seller(request):
+    form = PasswordChangeForm(request.user)
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user,request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Password Updated Successfully')
+            return redirect('home')
+        else:
+            messages.error(request, 'Check the fields')
+
+    template_name = 'Seller/changepassword.html'
+    context = {'form': form}
+    return render(request, template_name, context)
+
+
+
+def generateOTP():
+    digits = "0123456789"
+    OTP = ""
+    for i in range(6):
+        OTP += digits[math.floor(random.random() * 10)]
+    return OTP
+
+
+def send_otp(request):
+    email = request.POST.get("email")
+    print(email)
+    o = generateOTP()
+    print(o)
+    htmlgen = 'Your OTP is '+ o
+    print(htmlgen)
+    send_mail('OTP request', o, 'kusumdipke@gmail.com', [email], fail_silently=False, html_message=htmlgen)
+    return HttpResponse(o)
+
+

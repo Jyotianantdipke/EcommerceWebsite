@@ -1,0 +1,76 @@
+{% extends 'Customer/Customer_Base.html' %}
+{% load crispy_forms_tags %}
+
+<!--{% load static %}-->
+{% block content %}
+
+<div class="Customerreg" style="width: 80%;margin: 3% 10%;color: white;">
+    <div style="width: 30%;margin: 5% 5%;color: white;padding: 5% 0%;">
+        <div style="background-color: brown;">
+            {% if messages %}
+                {% for msj in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{msj}}
+                </div>
+                {% endfor %}
+            {% endif %}
+                   {% for i in messages %}
+       <script>
+           window.onload=function(){
+               alert('{{i}}')
+               }
+       </script>
+        {% endfor %}
+
+          </div>
+        <div id="email_div" style="display: block;">
+            <div class="form-group">
+                <h3>Verification to keep ordering amazing life's goods</h3>
+                <small>Add your email address.We'll send you verification code so we know you're real !!!</small><hr><br>
+                <label for="email"><b style="font-size: large;">Email address</b></label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter your valid email address.."><br>
+                <button  onclick="ajax_send_otp()" class="btn btn-info">Send OTP</button>
+            </div>
+        </div>
+        <div id="send_email_div" style="display: none;">
+            <div class="form-group">
+                <h3>Verification OTP sending....</h3>
+                <small>OTP is sending to your email address please check your entered email address for OTP</small><hr><br>
+                <button class="btn btn-light" disabled>
+                    <span style="font-size: large;" class="spinner-border text-success" role="status" aria-hidden="true"></span>
+                    <b style="font-size: large;">OTP Sending...</b>
+                  </button>
+            </div>
+        </div>
+        <b><div id="verify_text_div"></div></b>
+        <div id="otp_div" style="display: none;" >
+            <div class="form-group">
+                <h3>Verify your Email address</h3>
+                <small>Enter your OTP code here... !!!</small><hr><br>
+                <label for="email"><b style="font-size: large;">Enter OTP</b></label>
+                <input type="email" class="form-control" id="otp" name="otp" aria-describedby="emailHelp" placeholder="Enter your OTP.."><br>
+                <button  onclick="verify_otp()" class="btn btn-success">Validate</button>
+                <hr>
+                <small>Didn't you receive any code?</small>
+                <button onclick="ajax_send_otp()" class="btn btn-info"><b>Resend New Code</b></button>
+
+            </div>
+        </div>
+        <br>
+        <div id="form_div" style="display: none;" >
+            <div class="form-group">
+                <h3>You have completed your Verification Successfully....!!</h3>
+                <a href="{% url 'customerlogin' %}"><button class="btn btn-info">Login</button></a>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+

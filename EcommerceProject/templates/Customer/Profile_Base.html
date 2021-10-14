@@ -1,0 +1,43 @@
+{% extends 'Customer/Customer_Base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2" style="margin-left:30px;">
+            <div class="card card-body"
+                style="border:2px solid dodgerblue; border-radius: 5px; padding:20px 50px 20px 20px;">
+                <h3>ACCOUNT SETTINGS</h3>
+                <!-- A vertical navbar -->
+                <nav class="navbar bg-light">
+
+                    <!-- Links -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'showprofile' %}"><h4>Personal Information</h4></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'showaddress' %}"><h4>Manage Address</h4></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><h4>PAN Card Information</h4></a>
+                        </li>
+                    </ul>
+
+                </nav>
+                
+                <br><br>
+                <!-- <button class="btn btn-primary" type="submit">Search</button> -->
+            </div>
+        </div>
+
+        <div class="col-9">
+            {% block InnerContent %}
+    {% endblock %}
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock content %}

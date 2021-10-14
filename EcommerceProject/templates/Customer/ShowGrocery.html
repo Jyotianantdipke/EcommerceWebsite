@@ -1,46 +1,51 @@
-{% extends 'Accounts/Base.html' %}
+{% extends 'Customer/Customer_Base.html' %}
 {% load crispy_forms_tags %}
-{% load filterproduct %}
+{% load mobile %}
+
 {% block title %}
-    <title>Grocery</title>
+<title>Grocery</title>
 {% endblock %}
 
 {% block content %}
 
-    <h1 style="text-align:center">Grocery</h1>
-    <hr>
+<h1 style="text-align:center">Grocery</h1>
 
-<br>
-<br>
-      <div class="row">
-  <div class="col">
-    <div class="card card-body">
-      <form method="get">
-        <h1>search</h1>
-        {{groceryfilter.form}}
-        <button class="btn btn-primary" type="submit">Search</button>
-      </form>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2" style="margin-left:30px;">
+      <div class="card card-body" style="border:2px solid dodgerblue; border-radius: 5px; padding:20px 50px 20px 20px;">
+        <form method="get" >
+          <h1>search</h1>
+          {{groceryfilter.form}}
+
+<!--          {{mobilefilter.form.name.label}}-->
+<!--          {{mobilefilter.form.name}}-->
+<!--          <br><br>-->
+<!--          {{mobilefilter.form.brand_name}}-->
+
+          <br><br>
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-9">
+{% for r in records %}
+<div class="card mb-3 container" style="max-width: 1200px;">
+  <div class="row no-gutters">
+    <div class="col-md-5">
+      <img src="{{r.image.url}}" width="{{200}}" height="{{200}}" alt="Not availabele">
+    </div>
+    <div class="col-md-7">
+      <div class="card-body">
+        <h4 class="card-title">{{r.product_name}}</h4>
+        <h4 class="card-title">{{r.quantity}} Kg</h4>
+        <h4 class="card-text">Price: {{r.price}} Rs</h4>
+        <a href="{% url 'customergroceryitem' r.pk %}" class="btn btn-success">Add to Cart</a>
+      </div>
     </div>
   </div>
 </div>
-<br>
-<br>
-    {% for r in records %}
-    <div class="card mb-3 container" style="max-width: 1200px;">
-      <div class="row no-gutters">
-        <div class="col-md-5">
-          <img src="{{r.image.url}}" width="{{200}}" height="{{200}}" alt="Not availabele">
-        </div>
-        <div class="col-md-7">
-          <div class="card-body">
-            <h4 class="card-title">{{r.product_name}}</h4>
-              <h4 class="card-title">{{r.quantity}} Kg</h4>
-              <h4 class="card-text">Price: {{r.price}} Rs</h4>
-            <a href="{% url 'customergroceryitem' r.pk %}" class="btn btn-success">Add to Cart</a>
-          </div>
-        </div>
-      </div>
-    </div>
 {% endfor %}
 
 
@@ -70,5 +75,5 @@
   </ul>
 {% endif %}
     </div>
-
+</div>
 {% endblock %}
