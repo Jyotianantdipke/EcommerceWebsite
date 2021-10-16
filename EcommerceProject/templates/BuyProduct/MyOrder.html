@@ -1,0 +1,37 @@
+{% extends 'Customer/Customer_Base.html' %}
+
+{% block title %}
+<title>My order </title>
+{% endblock %}
+
+{% block content %}
+
+{% for i in order %}
+   <h3>order</h3>
+    <div style="margin:1% ;">
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-2">
+                    <img src="{{i.mobile.image.url}}" style="width:100%;height: 100%;"
+                        class="img-fluid rounded-start" alt="Image Not Found">
+                </div>
+                <div class="col-md-6">
+                    <div class="card-body">
+                        <!--                    <h5 class="card-title"><b>{{lap.customer}}</b></h5>-->
+                        <h4 class="card-text">{{i.mobile.name}}</h4>
+                        <h4 class="card-title">{{i.mobile.brand_name}}</h4>
+                      <h5 class="card-text">{{i.mobile.RAM}} GB RAM | {{i.mobile.ROM}} GB ROM | Expandable upto 512 GB</h5>
+                      <h5 class="card-text">{{i.mobile.processor}} Processor </h5>
+                      <h5 class="card-text">{{i.mobile.warranty}} Year Handset Warranty</h5>
+                      <h4 class="card-text">Price: {{i.mobile.price}} Rs</h4>
+                      <h4 class="card-text">Mode of Payment: {{i.payment_mode}}</h4>
+                      <a href="{% url 'createinvoice' i.id %}">
+                          <button class="btn btn-success">Download Invoice</button>
+                      </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

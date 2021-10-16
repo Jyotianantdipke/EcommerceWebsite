@@ -1,16 +1,14 @@
 {% extends 'Customer/Profile_Base.html' %}
-
+{% load crispy_forms_tags %}
 {% block InnerContent %}
 
 
   <form method="post" id="personForm" data-state-url="{% url 'ajax_load_states' %}" data-cities-url="{% url 'ajax_load_cities' %}" >
     {% csrf_token %}
     <table>
-      {{ form.as_table }}
+      {{ form.as_p}}
     </table>
     <button type="submit">Save</button>
   </form>
-
-  
 
 {% endblock InnerContent %}

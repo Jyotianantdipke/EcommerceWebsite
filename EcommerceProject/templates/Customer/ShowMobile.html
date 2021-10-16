@@ -49,6 +49,7 @@
                   <h5 class="card-text">{{r.warranty}} Year Handset Warranty</h5>
                   <h4 class="card-text">Price: {{r.price}} Rs</h4>
                 <a href="{% url 'customermobileitem' r.pk %}" class="btn btn-success">Add to Cart</a>
+                <a href="{% url 'buymobile' r.id %}" class="btn btn-primary">Buy Now</a>
               </div>
             </div>
           </div>

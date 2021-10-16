@@ -434,47 +434,39 @@ def universal_search(request):
             result = elem.capitalize()
     record=set()
     record_new=set()
+    
     for i in all_models:
         if result.find(i) != -1 :   
             Model = apps.get_model('Seller', i)
-            record.add(Model.objects.all())
-            print(f'type of record is printed:  {type(record)}')  
-            print("record length:    ",len(record))
+            for obj in Model.objects.all():
+                record.add(obj)
             context['Model']=Model.__name__
             print("Model Name is:   ",context['Model'])
-    for j in record:
-        for i in result.split(' '):
-            laptop=Laptop.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i)|Q(OS__icontains=i))
-            mobile=Mobile.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i))
-            grocery=Grocery.objects.filter(Q(product_name__icontains=i))
-            record_new.add(laptop)
-            record_new.add(mobile)
-            record_new.add(grocery)
-            # if j not in laptop:
-            #     record.remove(j)
-            # if j not in mobile:
-            #     record.remove(j)
-            # if j not in grocery:
-            #     record.remove(j)
-
     
     for i in result.split(' '):
         laptop=Laptop.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i)|Q(OS__icontains=i))
         mobile=Mobile.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i))
         grocery=Grocery.objects.filter(Q(product_name__icontains=i))
-        record_new.add(laptop)
-        record_new.add(mobile)
-        record_new.add(grocery)
+        for k in laptop:
+            record_new.add(k)
 
-    context['record']=record
-    context['record_new']=record_new
-    for i in record_new:
-        for j in i:
-            print(f"record_new  {j}")
-    print()
+        for k in mobile:
+            record_new.add(k)
+
+        for k in grocery:
+            record_new.add(k)
+
+
+    if len(record_new)>0 :      
+        record=record.intersection(record_new)
+
     for i in record:
-        for j in i:
-            print("record",j)
+        print("record       ",i)
+
+    for j in record_new:
+        print('record_new           ',j)
+    
+    
     return render(request,'Customer/universal_search.html',context)
 
 
@@ -512,4 +504,8 @@ def CustomerRazorpayPayment(request):
 @csrf_exempt
 def CustomerRazorpayconfirm(request):
     return render(request, "Customer/Confirmorder.html")
+
+
+
+
     

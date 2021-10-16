@@ -68,4 +68,7 @@ class Addresses(models.Model):
     area = models.CharField(max_length=64,null=True)
     landmark = models.CharField(max_length=64,null=True)
     
+    def __str__(self):
+        return f'{self.customer.first_name} {self.customer.last_name}, {self.Mobile_no},\n{self.flat},{self.area},{self.landmark}\n'\
+            f'{self.city},{self.state},{self.pin_code}'
     

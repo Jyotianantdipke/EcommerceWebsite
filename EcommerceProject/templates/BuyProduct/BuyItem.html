@@ -1,0 +1,40 @@
+{% extends 'Customer/Customer_Base.html' %}
+
+{% block title %}
+<title>Buy Your Product</title>
+{% endblock %}
+ {% block content %}
+{% if mobile %}
+ <div style="margin:1% ;">
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-2">
+                <img src="{{mobile.image.url}}" style="width:100%;height: 100%;"
+                    class="img-fluid rounded-start" alt="Image Not Found">
+            </div>
+            <div class="col-md-6">
+                <div class="card-body">
+                    <!--                    <h5 class="card-title"><b>{{lap.customer}}</b></h5>-->
+                    <h4 class="card-text">{{mobile.name}}</h4>
+                    <h4 class="card-title">{{mobile.brand_name}}</h4>
+                  <h5 class="card-text">{{mobile.RAM}} GB RAM | {{r.ROM}} GB ROM | Expandable upto 512 GB</h5>
+                  <h5 class="card-text">{{mobile.processor}} Processor </h5>
+                  <h5 class="card-text">{{mobile.warranty}} Year Handset Warranty</h5>
+                  <h4 class="card-text">Price: {{mobile.price}} Rs</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+<div class="container">
+    <div class="jumbotron">
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Place Order" class="btn btn-primary">
+        </form>
+       
+    </div>
+</div>
+ {% endblock %}
