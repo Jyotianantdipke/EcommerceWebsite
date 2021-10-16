@@ -6,5 +6,5 @@ class OrderedProductForm(forms.ModelForm):
     class Meta:
         model=OrderedProduct
         field='__all__'
-        exclude=['customer','laptop','mobile','grocery','price','quantity']
+        exclude=['customer','laptop','mobile','grocery','price','quantity','order_date']
 

@@ -2,6 +2,7 @@ from django.db import models
 from Accounts.models import Customer
 from Seller.models import Laptop,Mobile,Grocery
 from Customer.models import Addresses
+import datetime
 # Create your models here.
 
 payment_mode=(
@@ -17,9 +18,9 @@ class OrderedProduct(models.Model):
     grocery = models.ForeignKey(Grocery, on_delete=models.CASCADE, null=True)
     price=models.IntegerField()
     quantity=models.IntegerField()
-    delivery_address=models.OneToOneField(Addresses,on_delete=models.CASCADE)
+    delivery_address=models.ForeignKey(Addresses,on_delete=models.CASCADE)
     payment_mode=models.CharField(max_length=16,choices=payment_mode)
-    order_date=models.DateField()
+    order_date=models.DateField(default=datetime.date.today())
 
     # def __str__(self):
     #     return f'{self.customer},{self.delivery_address},{self.payment_mode} {self.mobile.name}'

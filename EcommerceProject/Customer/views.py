@@ -241,18 +241,22 @@ def Updateallitemview(request, pk):
 
 @login_required(login_url='customerlogin')
 def create_profile(request):
-    customer = Customer.objects.get(user=request.user)
-    form = CustomerProfileForm()
-    if request.method == 'POST':
-        form = CustomerProfileForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.customer = customer
-            # obj.address=form.cleaned_data['flat']+', '+form.cleaned_data['area']+', '+form.cleaned_data['landmark']
-            obj.full_name=form.cleaned_data['first_name']+' '+form.cleaned_data['last_name']
-            obj.save()
-            print("object get",obj)
-            return redirect('showprofile')
+    try:
+        customer = Customer.objects.get(user=request.user)
+        form = CustomerProfileForm()
+        if request.method == 'POST':
+            form = CustomerProfileForm(request.POST)
+            if form.is_valid():
+                obj = form.save(commit=False)
+                obj.customer = customer
+                # obj.address=form.cleaned_data['flat']+', '+form.cleaned_data['area']+', '+form.cleaned_data['landmark']
+                obj.full_name=form.cleaned_data['first_name']+' '+form.cleaned_data['last_name']
+                obj.save()
+                print("object get",obj)
+                return redirect('showprofile')
+    except Customer.DoesNotExist:
+        return redirect('customerlogin')
+
     template_name = 'Customer/Customer_Profile.html'
     context = {'form': form}
     return render(request, template_name, context)
@@ -291,13 +295,16 @@ class CustomerAddressUpdateView(UpdateView):
 
 @login_required(login_url='customerlogin')
 def show_profile(request):
-    customer = Customer.objects.get(user=request.user)
-    record=CustomerProfile.objects.filter(customer=customer)
-    print("Profile record",record)
-    template_name='Customer/Show_Customer_Profile.html'
-    context={'record':record}
+    print(request.user)
+    try:
+        customer = Customer.objects.get(user=request.user)
+        record=CustomerProfile.objects.filter(customer=customer)
+        print("Profile record",record)
+        template_name='Customer/Show_Customer_Profile.html'
+        context={'record':record}
+    except Customer.DoesNotExist:
+        return redirect('customerlogin')
     return render(request,template_name, context)
-
 
 
 
@@ -444,44 +451,26 @@ def universal_search(request):
             print("Model Name is:   ",context['Model'])
     
     for i in result.split(' '):
+        print("inside for")
         laptop=Laptop.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i)|Q(OS__icontains=i))
         mobile=Mobile.objects.filter(Q(name__icontains=i)|Q(RAM__icontains=i)|Q(ROM__icontains=i)|Q(brand_name__icontains=i)|Q(processor__icontains=i))
         grocery=Grocery.objects.filter(Q(product_name__icontains=i))
         for k in laptop:
             record_new.add(k)
-
         for k in mobile:
             record_new.add(k)
-
         for k in grocery:
             record_new.add(k)
-
-
-    if len(record_new)>0 :      
-        record=record.intersection(record_new)
-
-    for i in record:
-        print("record       ",i)
-
-    for j in record_new:
-        print('record_new           ',j)
-    
-    
+    result=set.union(record,record_new)
+   
+    context['record']=result
+    for i in context['record']:
+        if type(i)==Mobile:
+            print(i,type(i))
+        if type(i)==Laptop:
+            print(i,type(i))
     return render(request,'Customer/universal_search.html',context)
 
-
-
-
-# @login_required(login_url='customerlogin')
-# def cart_amount(request):
-#     print(request.user)
-#     customer=Customer.objects.get(user=request.user)
-#     cart_data=Cart.objects.filter(customer=customer)
-#     total_price=0
-#     for i in cart_data:
-#         total_price+=i.price
-#     print("total price ",total_price)
-#     return 
 
 def CustomerRazorpayPayment(request):
     amount = 0
@@ -503,6 +492,7 @@ def CustomerRazorpayPayment(request):
 
 @csrf_exempt
 def CustomerRazorpayconfirm(request):
+
     return render(request, "Customer/Confirmorder.html")
 
 
