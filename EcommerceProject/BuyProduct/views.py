@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from Accounts.models import Customer
+from Customer.models import Addresses
 from Seller.models import Mobile,Laptop,Grocery
 from.models import OrderedProduct
 from Customer.models import Cart
@@ -42,10 +43,17 @@ def buynow_mobile(request,id):
             else:
                 obj.save()
                 return redirect('customerrazorpay')
+    print(mobileitem.price,"price of mobile")
     template_name='BuyProduct/BuyItem.html'
     context={'form':form,'mobile':mobileitem}
     return render(request,template_name,context)
    
+
+
+
+
+
+
 @login_required(login_url='customerlogin')
 def my_order(request):
     customer=Customer.objects.get(user=request.user)
@@ -58,52 +66,33 @@ def my_order(request):
     template_name='BuyProduct/MyOrder.html'
     return render(request,template_name,context)
 
+
+
+
 @login_required(login_url='customerlogin')
 def buy_cart_product(request):
     customer=Customer.objects.get(user=request.user)
     all_products=Cart.objects.filter(customer=customer)
-    print(len(all_products))
-    for i in all_products:
-        print(i.id,i.price,type(i))
+    new_data=[]
     form=OrderedProductForm()
     if request.method=='POST':
         form=OrderedProductForm(request.POST)
         if form.is_valid():
-            obj=form.save(commit=False)
-            obj.customer=customer
-            for i in Cart.objects.filter(customer=customer):
-                print('inside for')
-                if i.mobile is not None:
-                    mobileitem=Mobile.objects.get(id=i.mobile.id)
-                    print(mobileitem)
-                    obj.mobile=i.mobile
-                    obj.quantity=i.quantity
-                    obj.price=i.price
-                    i.delete()
-                    obj.save()
-                    mobileitem.stock-=i.quantity
-                elif i.laptop is not None:
-                    laptopitem=Laptop.objects.get(id=i.laptop.id)
-                    obj.laptop=i.laptop
-                    obj.quantity=i.quantity
-                    obj.price=i.price
-                    obj.save()
-                    i.delete()
-                    laptopitem.stock-=i.quantity
-                elif i.grocery is not None:
-                    grocreyitem=Grocery.objects.get(id=i.grocery.id)
-                    obj.grocery=i
-                    obj.quantity=i.quantity
-                    obj.price=i.price
-                    obj.save()
-                    i.delete()
-                    grocreyitem.stock-=i.quantity      
+            address=request.POST.get('delivery_address')
+            add_id=Addresses.objects.get(id=address)
+            payment_mode=request.POST.get('payment_mode')
+            for i in all_products:
+                if i.laptop:
+                    obj=OrderedProduct.objects.create(customer=customer,laptop=i.laptop,price=i.price,quantity=i.quantity,delivery_address=add_id,payment_mode=payment_mode)
+                elif i.mobile:
+                    obj=OrderedProduct.objects.create(customer=customer,mobile=i.mobile,price=i.price,quantity=i.quantity,delivery_address=add_id,payment_mode=payment_mode)
+                else:
+                    obj=OrderedProduct.objects.create(customer=customer,grocery=i.grocery,price=i.price,quantity=i.quantity,delivery_address=add_id,payment_mode=payment_mode)
             if form.cleaned_data['payment_mode']=='Cash on Delivery':
                 print("inside if mode of payment", form.cleaned_data['payment_mode'])
                 print('Order Placed!!!')
                 return redirect('myorder')
             else:
-                print("inside else mode of payment", form.cleaned_data['payment_mode'])
                 return redirect('customerrazorpay')
         return redirect('myorder')
     template_name='BuyProduct/BuyItem.html'
@@ -111,15 +100,18 @@ def buy_cart_product(request):
     return render(request,template_name,context)
 
 
+
+
+
 @login_required(login_url='customerlogin')
 def generate_pdf(request,id):
     order=OrderedProduct.objects.get(id=id)
     customer=Customer.objects.get(user=request.user)
     template = get_template('BuyProduct/invoice.html')
+
     context = {
         "invoice_id": order.id,
         "customer_name": order.customer,
-        "mobile" :order.mobile,
         'billing_address':order.delivery_address,
         'payment_mode':order.payment_mode
     }

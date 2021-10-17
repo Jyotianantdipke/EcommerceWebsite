@@ -221,6 +221,7 @@ def Deleteitemview(request,id):
         else:
             print('Deleted!!')
             y.delete()
+            return redirect('cartview')
     except Cart.DoesNotExist:
         return redirect('cartview')
 
@@ -440,7 +441,6 @@ def universal_search(request):
             result = elem.capitalize()
     record=set()
     record_new=set()
-    
     for i in all_models:
         if result.find(i) != -1 :   
             Model = apps.get_model('Seller', i)
@@ -461,7 +461,6 @@ def universal_search(request):
         for k in grocery:
             record_new.add(k)
     result=set.union(record,record_new)
-   
     context['record']=result
     for i in context['record']:
         if type(i)==Mobile:

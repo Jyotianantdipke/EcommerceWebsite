@@ -3,49 +3,38 @@
 
 
 {% block content %}
+<h1>{{amount1}}</h1>
+<div style="margin: 10% 30%;width: 40%;">
+    <div class="center" style="color: white;">
+    <form class="text-center border border-light p-5" action="{% url 'customerrazorpaysuccess' %}" method="POST">
+    
+    {% csrf_token %}
+    
+        <p class="h3 mb-3" style="color: black;">
+        <i class="fas fa-coffee"></i>Place Order 
+        </p>
+        <b style="color:black;font-size: large;">{{amount1}}</b><br><br>
 
-<button id="rzp-button1">Pay</button>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
-var options = {
-    "key": "rzp_test_TULhE5xfciuNwn", // Enter the Key ID generated from the Dashboard
-    "amount": "{{amount}}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    "currency": "INR",
-    "name": "CJC Markets",
-    "description": "Test Transaction",
-    "image": "{% static 'Images/Logo.png' %}",
-    "order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    "handler": function (response){
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature)
-    },
-    "prefill": {
-        "name": "{{customer.name}}",
-        "email": "{{user.email}}",
-        "contact": "{{user.mobile_no}}"
-    },
-    "notes": {
-        "address": "Razorpay Corporate Office"
-    },
-    "theme": {
-        "color": "#3399cc"
-    }
-};
-var rzp1 = new Razorpay(options);
-rzp1.on('payment.failed', function (response){
-        alert(response.error.code);
-        alert(response.error.description);
-        alert(response.error.source);
-        alert(response.error.step);
-        alert(response.error.reason);
-        alert(response.error.metadata.order_id);
-        alert(response.error.metadata.payment_id);
-});
-document.getElementById('rzp-button1').onclick = function(e){
-    rzp1.open();
-    e.preventDefault();
-}
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"
+    data-key="rzp_test_TULhE5xfciuNwn"
+    data-amount="{{amount}}"
+    data-currency="INR"
+    data-order_id="{{payment.id}}"
+    data-buttontext="Pay with Razorpay"
+    data-name="CJC Markets"
+    data-description="Secure Payment"
+    data-image="{% static 'Images/Logo.png' %}"
+    data-prefill.name="{{customer.name}}"
+    data-prefill.email="{{user.email}}"
+    data-prefill.contact="{{user.mobile_no}}"
+    data-theme.color="#3399cc">
 </script>
 
+    
+
+
+</form>
+</div>
+</div>
 {% endblock %}
