@@ -15,7 +15,7 @@ urlpatterns=[
     path('customergroceryitem/<int:pk>', views.Groceryview, name='customergroceryitem'),
 
     path('cartview/', views.Cartview, name='cartview'),
-    path('deleteitem/<int:pk>', views.Deleteitemview, name='deleteitem'),
+    path('deleteitem/<int:id>', views.Deleteitemview, name='deleteitem'),
     path('customerupdateitem/<int:pk>', views.Updateallitemview, name='customerupdateitem'),
     path('createprofile/',views.create_profile,name='createprofile'),
     path('updateprofile/<int:id>/',views.update_profile,name='updateprofile'),

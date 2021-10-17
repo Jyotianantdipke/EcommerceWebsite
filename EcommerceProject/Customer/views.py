@@ -206,24 +206,23 @@ def Cartview(request):
 
 
 @login_required(login_url='login')
-def Deleteitemview(request, pk):
-    # item=Order_item.objects.get(id=pk)
-    # item.delete()
-    # return redirect('cartview')
-    y = Cart.objects.get(id=pk)
-    if y.quantity > 1:
-        z = y.quantity - 1
-        p = y.price / y.quantity
-        q = p * z
-        y.price = q
-        y.quantity = z
-        y.save()
-        print('Updated!!!')
+def Deleteitemview(request,id):
+    try:
+        y = Cart.objects.get(id=id)
+        if y.quantity > 1:
+            z = y.quantity - 1
+            p = y.price / y.quantity
+            q = p * z
+            y.price = q
+            y.quantity = z
+            y.save()
+            print('Updated!!!')
+            return redirect('cartview')
+        else:
+            print('Deleted!!')
+            y.delete()
+    except Cart.DoesNotExist:
         return redirect('cartview')
-    else:
-        print('Deleted!!')
-        y.delete()
-    return redirect('showcart')
 
 
 def Updateallitemview(request, pk):

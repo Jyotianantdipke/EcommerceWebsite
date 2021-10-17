@@ -25,7 +25,7 @@
                       <h5 class="card-text">{{i.mobile.warranty}} Year Handset Warranty</h5>
                       <h4 class="card-text">Price: {{i.mobile.price}} Rs</h4>
                       <h4 class="card-text">Mode of Payment: {{i.payment_mode}}</h4>
-                      <a href="{% url 'createinvoice' i.id %}">
+                      <a href="{% url 'generatepdf' i.id %}">
                           <button class="btn btn-success">Download Invoice</button>
                       </a>
                     </div>
